@@ -1,0 +1,56 @@
+<div class="flex flex-col h-full justify-between">
+  <div class="mt-5">
+    <p-button
+      styleClass="w-full start"
+      label="Dashboard"
+      size="small"
+      severity="primary"
+      variant="text"
+      routerLink="app/home"
+      icon="pi pi-objects-column"
+    />
+    <p-button
+      styleClass="w-full start"
+      label="Budgets"
+      size="small"
+      severity="primary"
+      variant="text"
+      routerLink="app/home"
+      icon="pi pi-receipt"
+    />
+    <p-button
+      styleClass="w-full start"
+      label="Transactions"
+      size="small"
+      severity="primary"
+      variant="text"
+      routerLink="app/home"
+      icon="pi pi-credit-card"
+    />
+    <p-button
+      styleClass="w-full start"
+      label="Goals"
+      size="small"
+      severity="primary"
+      variant="text"
+      routerLink="app/home"
+      icon="pi pi-list-check"
+    />
+  </div>
+  <div class="">
+    <p-menu #userMenu [model]="userMenuItems" [popup]="true"  />
+    <p-button
+      (click)="userMenu.toggle($event)"
+      styleClass="w-full"
+      variant="text"
+    >
+      <div class="flex justify-between w-full items-center">
+        <div class="flex gap-2 items-center">
+          <p-avatar label="W" size="normal" />
+          <span>Wyatt Hardin</span>
+        </div>
+        <i class="pi pi-chevron-down"></i>
+      </div>
+    </p-button>
+  </div>
+</div>

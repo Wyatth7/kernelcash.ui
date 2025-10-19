@@ -1,0 +1,28 @@
+<p-card class="w-full h-full p-4 overflow-y-auto">
+  <ng-template #header>
+    <div class="flex justify-between">
+      <div class="flex gap-2 items-center">
+        <i [class]="iconClass()" style="font-size: 1.3rem"></i>
+        <h1 class="text-2xl">{{title()}}</h1>
+      </div>
+      @if (!customAction() || !!actionLabel()) {
+        <p-button
+          [label]="actionLabel()"
+          icon="pi pi-angle-right"
+          link
+          (click)="actionClicked.emit()"
+          iconPos="right"
+        />
+      }
+    </div>
+  </ng-template>
+  @if (shouldLoad()) {
+    <div class="flex justify-center">
+      <p-progress-spinner [style]="{width: '50px', height: '50px'}" />
+    </div>
+  } @else {
+    <div class="h-full w-full">
+      <ng-content></ng-content>
+    </div>
+  }
+</p-card>
