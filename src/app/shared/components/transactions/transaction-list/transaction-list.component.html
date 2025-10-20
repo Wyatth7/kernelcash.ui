@@ -2,14 +2,14 @@
   <ng-template #list let-items>
     <div class="w-full flex flex-col overflow-y-auto">
       @for (transaction of items; track transaction.id; let first = $first) {
-        <div class="flex justify-between items-center gap-2 p-5"
+        <div class="flex justify-between items-center gap-2 p-5 px-0 md:px-5"
              [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
           <div class="flex items-center gap-4">
             <p-avatar [label]="transaction.name[0]" size="normal" />
             <h4>{{transaction.name}}</h4>
           </div>
           <div>
-            <span>{{transaction.amount | currency}}</span>
+            <span class="text-nowrap">{{transaction.amount | currency}}</span>
           </div>
         </div>
       }
