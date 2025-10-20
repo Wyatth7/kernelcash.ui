@@ -6,13 +6,16 @@
     </div>
   } @else {
     <div class="flex justify-between items-end p-4">
+      <h4 class="text-3xl">KernelCash</h4>
       <div class="flex items-center">
-      <button class="bg-transparent cursor-pointer mb-0 pb-0">
+      <button (click)="showDrawer = true" class="bg-transparent cursor-pointer mb-0 pb-0">
         <i class="pi pi-bars" style="font-size: 1.5rem; margin: 0; padding: 0"></i>
       </button>
       </div>
-      <h4 class="text-3xl">KernelCash</h4>
     </div>
+    <p-drawer [(visible)]="showDrawer" position="full" header="KernelCash">
+      <kc-side-nav />
+    </p-drawer>
   }
   <div class="h-full md:ml-[16rem]">
     <router-outlet />

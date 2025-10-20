@@ -5,6 +5,7 @@ import {ScreenSizeService} from '../shared/services/screen-size.service';
 import {AsyncPipe} from '@angular/common';
 import {Button, ButtonDirective} from 'primeng/button';
 import {Subscription} from 'rxjs';
+import {Drawer} from 'primeng/drawer';
 
 @Component({
   selector: 'kc-core',
@@ -12,7 +13,8 @@ import {Subscription} from 'rxjs';
     SideNavComponent,
     RouterOutlet,
     Button,
-    ButtonDirective
+    ButtonDirective,
+    Drawer
   ],
   templateUrl: 'core.component.html'
 })
@@ -22,6 +24,7 @@ export class CoreComponent implements OnInit, OnDestroy {
   private _screenSizeSubscription!: Subscription;
 
   protected readonly isMobile = signal<boolean>(false);
+  protected showDrawer: boolean = false;
 
   ngOnInit(): void {
     this._screenSizeSubscription = this._screenSize.isMobile$.subscribe(
