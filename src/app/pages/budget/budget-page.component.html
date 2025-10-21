@@ -1,0 +1,19 @@
+<div>
+  <div class="flex items-center justify-between gap-4">
+      <h1 class="text-3xl">Your Budgets</h1>
+      <p-button
+        (click)="showCreateForm = true"
+        severity="secondary"
+        label="New Budget"
+        icon="pi pi-plus"
+        size="small" />
+  </div>
+</div>
+
+<p-drawer
+  [(visible)]="showCreateForm"
+  header="New Budget"
+  position="right"
+  styleClass="!w-full  md:!w-[30rem]">
+  <kc-budget-create-form />
+</p-drawer>

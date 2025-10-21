@@ -1,5 +1,5 @@
 import {inject, Injectable, OnDestroy} from '@angular/core';
-import {Observable, Subject, Subscription} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, Subscription} from 'rxjs';
 import {BreakpointObserver} from '@angular/cdk/layout';
 
 @Injectable({providedIn: 'root'})
@@ -7,7 +7,7 @@ export class ScreenSizeService implements OnDestroy {
   private readonly _breakpointObserver = inject(BreakpointObserver);
 
   private _screenSizeSubscription!: Subscription;
-  private _isMobile = new Subject<boolean>();
+  private _isMobile = new BehaviorSubject<boolean>(window.innerWidth > 767);
 
   public get isMobile$(): Observable<boolean> {
     return this._isMobile.asObservable();
