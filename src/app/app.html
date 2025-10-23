@@ -1,1 +1,10 @@
-<router-outlet />
+@if (appReady()) {
+  <router-outlet />
+} @else {
+  <div class="w-full h-dvh h-vh">
+    <div class="flex flex-col justify-center items-center h-full">
+      <p-progressSpinner />
+      <h1 class="text-gray-500">Getting your cash together...</h1>
+    </div>
+  </div>
+}

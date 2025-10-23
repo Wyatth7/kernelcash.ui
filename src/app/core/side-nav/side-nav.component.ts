@@ -19,12 +19,16 @@ import {AuthenticationService} from '../../shared/services/authentication.servic
 export class SideNavComponent {
   private readonly _authentication = inject(AuthenticationService);
 
+  protected get currentUserNameFull(): string {
+    return `${this._authentication.currentUser.nameFirst} ${this._authentication.currentUser.nameLast}`;
+  }
+
   protected userMenuItems: MenuItem[] = [
     {
       label: 'Logout',
       icon: 'pi pi-sign-out',
       command: async (event: MenuItemCommandEvent) => {
-        await this._authentication.logout();
+        this._authentication.logout();
       }
     }
   ]

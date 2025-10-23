@@ -46,8 +46,8 @@
     >
       <div class="flex justify-between w-full items-center">
         <div class="flex gap-2 items-center">
-          <p-avatar label="W" size="normal" />
-          <span>Wyatt Hardin</span>
+          <p-avatar [label]="currentUserNameFull[0]" size="normal" />
+          <span>{{ currentUserNameFull }}</span>
         </div>
         <i class="pi pi-chevron-down"></i>
       </div>
