@@ -1,5 +1,5 @@
 <div [formGroup]="form()">
-  <p-stepper [(value)]="activeStep" [linear]="true">
+  <p-stepper [(value)]="activeStep" [linear]="false">
     <p-step-item [value]="1">
       <p-step>
         <ng-template #content let-activateCallback="activateCallback" let-value="value">
@@ -41,7 +41,7 @@
             </p>
           </div>
             <kc-spending-bucket-array-input [spendingBucketFormArray]="form().controls.incomeSpendingBuckets" />
-          <div class="flex gap-2 mt-10">
+          <div class="flex gap-2 mt-6">
             <p-button label="Back" severity="secondary" (onClick)="activateCallback(1)" />
             <p-button [disabled]="form().controls.incomeSpendingBuckets.invalid" label="Next" (onClick)="activateCallback(3)"/>
           </div>
@@ -69,6 +69,13 @@
               </p>
             </div>
             <kc-spending-bucket-array-input [spendingBucketFormArray]="form().controls.expenseSpendingBuckets" />
+            <p
+              class="-mt-7 p-0 mb-6"
+              [ngClass]="{
+                  'text-emerald-300': !expenseComparison().invalid,
+                  'text-red-400': expenseComparison().invalid
+               }"
+            >Remaining: {{expenseComparison().value | currency}}</p>
             <div class="flex gap-2 flex-row">
               <p-button label="Back" severity="secondary" (onClick)="activateCallback(2)" [disabled]="formSubmitting()" />
               <p-button
@@ -92,17 +99,22 @@
         <ng-template #content let-activateCallback="activateCallback">
           <div class="py-6">
             <div class=" flex flex-col gap-2">
+              <p-message class="mb-2" severity="success">Success! Your budget has been created.</p-message>
               <h3 class="text-2xl">Get started faster</h3>
               <p class="m-0 p-0 text-gray-400">
                 Automatically import transactions from your bank accounts.
                 Your transactions will automatically appear in your budget.
               </p>
-              <p class="mt-4 p-0 text-gray-400">Click "Go to budget" below to skip importing your transactions.</p>
+              <p class="mt-4 p-0 text-gray-400">
+                Click "Go to budget" below to skip importing your transactions.
+                You can import your transactions later.
+              </p>
             </div>
             <div class="mt-4">
               <p-fileupload
                 [fileLimit]="5"
                 [multiple]="true"
+                name="files"
                 accept=".ofx"
                 mode="advanced"
                 [showUploadButton]="false"

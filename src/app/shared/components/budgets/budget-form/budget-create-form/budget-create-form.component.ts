@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, computed, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {StepperModule} from 'primeng/stepper';
 import {ButtonModule} from 'primeng/button';
 import {InputText} from 'primeng/inputtext';
@@ -15,6 +15,14 @@ import {
   getFullBudgetValue
 } from '../../../../forms/budgets/create-budget/create-budget-form';
 import {SpendingBucketArrayInputComponent} from '../spending-bucket-array-input/spending-bucket-array-input.component';
+import {Message} from 'primeng/message';
+import {CurrencyPipe, NgClass} from '@angular/common';
+import {Subscription} from 'rxjs';
+
+type IncomeExpenseComparison = {
+  value: number;
+  invalid: boolean;
+}
 
 @Component({
   selector: 'kc-budget-create-form',
@@ -26,20 +34,27 @@ import {SpendingBucketArrayInputComponent} from '../spending-bucket-array-input/
     IconStepComponent,
     FileUpload,
     ReactiveFormsModule,
-    SpendingBucketArrayInputComponent
+    SpendingBucketArrayInputComponent,
+    Message,
+    NgClass,
+    CurrencyPipe
   ],
   templateUrl: 'budget-create-form.component.html'
 })
-export class BudgetCreateFormComponent {
+export class BudgetCreateFormComponent implements OnInit, OnDestroy {
   private readonly _authentication = inject(AuthenticationService);
   private readonly _budgetWriter = inject(BudgetWriteService);
   private readonly _fb = inject(FormBuilder);
 
-  protected readonly uploadUrl = `${environment.apiUrl}transactions/import`
+  protected readonly uploadUrl = `${environment.apiUrl}transaction/import`
   protected readonly headers: HttpHeaders;
 
   protected readonly form = signal<FormGroup<CreateBudgetForm>>(createBudgetForm(this._fb)).asReadonly();
   protected readonly formSubmitting = signal<boolean>(false);
+
+  private _expenseComparisonSubscription!: Subscription;
+
+  protected readonly expenseComparison = signal<IncomeExpenseComparison>({ value: 0, invalid: false });
 
   protected activeStep: number = 1;
 
@@ -48,6 +63,25 @@ export class BudgetCreateFormComponent {
 
     headers.set('Authorization', `Bearer ${this._authentication.token}`);
     this.headers = headers
+  }
+
+  public ngOnInit(): void {
+    this.form().valueChanges.subscribe(changes => {
+      const formValues = this.form().getRawValue();
+      const incomeTotal = formValues.incomeSpendingBuckets.reduce((a, b) => a + b.total, 0);
+      const expenseTotal = formValues.expenseSpendingBuckets.reduce((a, b) => a + b.total, 0);
+      const remaining = incomeTotal - expenseTotal;
+
+      this.expenseComparison.set({
+        value: remaining,
+        invalid: remaining < 0
+      });
+    })
+
+  }
+
+  public ngOnDestroy(): void {
+    this._expenseComparisonSubscription.unsubscribe();
   }
 
   protected async submitBudget(callback: (value: number) => unknown): Promise<void> {
