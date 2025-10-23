@@ -12,8 +12,6 @@ import {Drawer} from 'primeng/drawer';
   imports: [
     SideNavComponent,
     RouterOutlet,
-    Button,
-    ButtonDirective,
     Drawer
   ],
   templateUrl: 'core.component.html'

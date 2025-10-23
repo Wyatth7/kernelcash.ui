@@ -1,15 +1,25 @@
 import {inject, Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {LoggingService} from './logging.service';
+import {User} from '../models/users/user';
+import {UserService} from './user.service';
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
   private readonly _logger = inject(LoggingService);
+  private readonly _userService = inject(UserService);
+
+  private _user!: User;
 
   public get loggedIn(): boolean {
     return !!this.token;
+  }
+
+  public get currentUser(): User {
+    if (!this._user)
+      this.logout();
+
+    return this._user;
   }
 
   public get token(): string {
@@ -17,7 +27,11 @@ export class AuthenticationService {
     const cookies = document.cookie.split(';');
     const token = cookies.find(cookie => cookie.startsWith(AUTH_NAME))?.split(AUTH_NAME)[1];
 
-    return token ?? '';
+    if (!token) {
+      this.logout();
+      return '';
+    }
+    return token;
   }
 
   /**
@@ -25,11 +39,13 @@ export class AuthenticationService {
    *
    * Checks to see if the user token exists,
    */
-  public init(): void {
+  public async init(): Promise<void> {
     if (!this.token) {
       this.unauthorized();
       return;
     }
+
+    this._user = await this._userService.getCurrentUser();
   }
 
   /**

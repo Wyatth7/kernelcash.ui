@@ -1,0 +1,31 @@
+<div>
+  <div class="flex flex-col gap-2">
+    @for (spendingBucket of spendingBucketFormArray().controls; track spendingBucket; let index = $index; let first = $first) {
+      <div class="flex flex-col gap-2" [formGroup]="spendingBucket">
+        @if (!first) {
+          <p-divider type="solid" />
+        }
+        <div class="flex flex-col gap-1">
+          <label>Name</label>
+          <input pInputText placeholder="Paycheck 1" formControlName="name" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label>Amount</label>
+          <p-inputnumber
+            formControlName="total"
+            inputId="locale-user"
+            mode="currency"
+            currency="USD"
+            placeholder="Income amount"
+          ></p-inputnumber>
+        </div>
+      </div>
+        @if (spendingBucketFormArray().length > 1) {
+          <p-button label="Remove" (click)="removeSpendingBudget(index)" variant="text" size="small" severity="danger" />
+        }
+    }
+  </div>
+  <p-divider type="solid" align="center">
+    <p-button (click)="addSpendingBucket()" [label]="addText()" icon="pi pi-plus" variant="text" severity="info" />
+  </p-divider>
+</div>
