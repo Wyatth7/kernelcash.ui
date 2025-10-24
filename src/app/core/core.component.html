@@ -1,7 +1,7 @@
 <div class="w-full max-w-[100%] h-vh h-dvh relative">
 <!--  Side nav  -->
   @if (isMobile()) {
-    <div class="h-full min-w-[16rem] max-w-[16rem] absolute">
+    <div class="h-full min-w-[12rem] max-w-[12rem] lg:min-w-[16rem] lg:max-w-[16rem] absolute">
       <kc-side-nav />
     </div>
   } @else {
@@ -17,7 +17,10 @@
       <kc-side-nav />
     </p-drawer>
   }
-  <div class="h-full md:ml-[16rem] p-4">
-    <router-outlet />
+  <div class="h-full md:ml-[12rem] lg:ml-[16rem] md:p-1 md:pt-4 lg:p-4 overflow-y-auto">
+    <div class="px-4 pb-4">
+      <h1 class="text-3xl mb-4">{{ pageTitle() }}</h1>
+      <router-outlet />
+    </div>
   </div>
 </div>

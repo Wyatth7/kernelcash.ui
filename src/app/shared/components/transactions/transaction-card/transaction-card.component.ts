@@ -14,6 +14,6 @@ import {TransactionQuery} from '../../../models/transactions/transaction-query';
 export class TransactionCardComponent {
   protected readonly loading = signal<boolean>(true);
   protected readonly transactionQuery: Partial<TransactionQuery> = {
-    size: 10
+    size: 5
   };
 }

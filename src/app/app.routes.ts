@@ -1,7 +1,8 @@
 import { Routes } from '@angular/router';
 import {DashboardComponent} from './pages/dashboard/dashboard.component';
 import {CoreComponent} from './core/core.component';
-import {BudgetPageComponent} from './pages/budget/budget-page.component';
+import {BudgetHomePageComponent} from './pages/budget/budget-home-page.component';
+import {BudgetViewerComponent} from './pages/budget/budget-viewer/budget-viewer.component';
 
 export const routes: Routes = [
   {
@@ -14,7 +15,13 @@ export const routes: Routes = [
       },
       {
         path: 'budgets',
-        component: BudgetPageComponent
+        component: BudgetHomePageComponent,
+        children: [
+          {
+            path: ':budgetId',
+            component: BudgetViewerComponent
+          }
+        ]
       },
       {
         path: '**',

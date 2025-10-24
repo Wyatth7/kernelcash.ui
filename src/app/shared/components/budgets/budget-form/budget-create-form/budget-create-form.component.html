@@ -1,5 +1,5 @@
 <div [formGroup]="form()">
-  <p-stepper [(value)]="activeStep" [linear]="false">
+  <p-stepper [(value)]="activeStep" [linear]="true">
     <p-step-item [value]="1">
       <p-step>
         <ng-template #content let-activateCallback="activateCallback" let-value="value">
@@ -123,6 +123,8 @@
                 [withCredentials]="true"
                 [url]="uploadUrl"
                 [headers]="headers"
+                (onBeforeUpload)="transactionsUploading.set(true)"
+                (onUpload)="transactionsUploading.set(false)"
               >
                 <ng-template #empty>
                   <div class="py-5">Drag and drop your exported transaction files here.</div>
@@ -130,7 +132,12 @@
               </p-fileupload>
             </div>
             <div class="flex gap-2 mt-10">
-              <p-button label="Go to budget" icon="pi pi-check" severity="success"/>
+              <p-button
+                [disabled]="transactionsUploading()"
+                label="Go to budget"
+                icon="pi pi-check"
+                severity="success"
+                (click)="navigateToBudgetPage()"/>
             </div>
           </div>
         </ng-template>

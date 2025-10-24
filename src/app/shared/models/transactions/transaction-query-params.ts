@@ -1,6 +1,6 @@
-export interface TransactionQueryParams {
+import {Page} from '../pagination/page';
+
+export interface TransactionQueryParams extends Page {
   startDate: string;
   endDate: string;
-  size: number;
-  page: number;
 }

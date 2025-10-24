@@ -1,0 +1,9 @@
+<kc-loading-card
+  title="Budgets"
+  icon="pi pi-receipt"
+  actionLabel="See All"
+  [shouldLoad]="loading()"
+  (actionClicked)="navigateToBudgetPage()"
+>
+  <kc-budget-list [budgetGroupId]="auth.currentUser.budgetGroupId" (dataLoaded)="loading.set(false)" />
+</kc-loading-card>

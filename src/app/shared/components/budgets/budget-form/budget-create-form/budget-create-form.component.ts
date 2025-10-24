@@ -18,6 +18,7 @@ import {SpendingBucketArrayInputComponent} from '../spending-bucket-array-input/
 import {Message} from 'primeng/message';
 import {CurrencyPipe, NgClass} from '@angular/common';
 import {Subscription} from 'rxjs';
+import {Router} from '@angular/router';
 
 type IncomeExpenseComparison = {
   value: number;
@@ -45,12 +46,15 @@ export class BudgetCreateFormComponent implements OnInit, OnDestroy {
   private readonly _authentication = inject(AuthenticationService);
   private readonly _budgetWriter = inject(BudgetWriteService);
   private readonly _fb = inject(FormBuilder);
+  private readonly _router = inject(Router);
 
   protected readonly uploadUrl = `${environment.apiUrl}transaction/import`
   protected readonly headers: HttpHeaders;
 
   protected readonly form = signal<FormGroup<CreateBudgetForm>>(createBudgetForm(this._fb)).asReadonly();
   protected readonly formSubmitting = signal<boolean>(false);
+  protected readonly transactionsUploading = signal<boolean>(false);
+  protected readonly createdBudgetId = signal<number>(0);
 
   private _expenseComparisonSubscription!: Subscription;
 
@@ -81,23 +85,33 @@ export class BudgetCreateFormComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    if (!this._expenseComparisonSubscription)
+      return;
+
     this._expenseComparisonSubscription.unsubscribe();
   }
 
   protected async submitBudget(callback: (value: number) => unknown): Promise<void> {
     try {
       this.formSubmitting.set(true);
-      await this._budgetWriter
+      const budgetId = await this._budgetWriter
         .createFullBudget(
           this._authentication.currentUser.budgetGroupId,
           getFullBudgetValue(this.form())
         );
 
       this.formSubmitting.set(false);
-
+      this.createdBudgetId.set(budgetId);
       callback(4);
     } catch {
       this.formSubmitting.set(false)
     }
+  }
+
+  protected async navigateToBudgetPage(): Promise<void> {
+    if (this.createdBudgetId() <= 0)
+      return;
+
+    await this._router.navigate(['app', 'budgets', this.createdBudgetId()]);
   }
 }

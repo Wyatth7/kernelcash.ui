@@ -13,7 +13,7 @@ import {Button} from 'primeng/button';
   templateUrl: 'loading-card.component.html'
 })
 export class LoadingCardComponent {
-  public readonly title = input.required<string>();
+  public readonly title = input<string>();
   public readonly icon = input<string>();
   public readonly shouldLoad = input.required<boolean>();
   public readonly customAction = input<boolean>();

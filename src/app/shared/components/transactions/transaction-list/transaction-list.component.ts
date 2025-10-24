@@ -6,6 +6,7 @@ import {TransactionQueryParams} from '../../../models/transactions/transaction-q
 import {DataView} from 'primeng/dataview';
 import {Avatar} from 'primeng/avatar';
 import {CurrencyPipe, NgClass} from '@angular/common';
+import {TransactionQueryItem} from '../../../models/transactions/transaction-query-item';
 
 @Component({
   selector: 'kc-transaction-list',
@@ -23,7 +24,7 @@ export class TransactionListComponent implements OnInit {
   public readonly parameters = input<Partial<TransactionQuery>>();
   public readonly dataLoaded = output<void>();
 
-  protected readonly transactions = signal<Transaction[]>([]);
+  protected readonly transactions = signal<TransactionQueryItem[]>([]);
 
   async ngOnInit(): Promise<void> {
     await this.loadTransactions();
@@ -43,5 +44,12 @@ export class TransactionListComponent implements OnInit {
       size: this.parameters()?.size ?? 100,
       page: this.parameters()?.page ?? 0
     }
+  }
+
+  protected getTransactionSubTitle(transaction: TransactionQueryItem): string {
+    if (transaction.accountName)
+      return transaction.accountName;
+
+    return `Account ending in ${transaction.accountNumber}`;
   }
 }
