@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, output} from '@angular/core';
 import {Button, ButtonDirective, ButtonIcon} from 'primeng/button';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {Menu} from 'primeng/menu';
@@ -22,6 +22,8 @@ export class SideNavComponent {
   protected get currentUserNameFull(): string {
     return `${this._authentication.currentUser.nameFirst} ${this._authentication.currentUser.nameLast}`;
   }
+
+  public readonly closeNav = output<void>();
 
   protected userMenuItems: MenuItem[] = [
     {

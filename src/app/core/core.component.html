@@ -1,4 +1,4 @@
-<div class="w-full max-w-[100%] h-vh h-dvh relative">
+<div class="w-full h-full relative flex flex-col md:block">
 <!--  Side nav  -->
   @if (isMobile()) {
     <div class="h-full min-w-[12rem] max-w-[12rem] lg:min-w-[16rem] lg:max-w-[16rem] absolute">
@@ -6,7 +6,7 @@
     </div>
   } @else {
     <div class="flex justify-between items-end p-4">
-      <h4 class="text-3xl">KernelCash</h4>
+      <h4 class="text-2xl font-normal">KernelCash</h4>
       <div class="flex items-center">
       <button (click)="showDrawer = true" class="bg-transparent cursor-pointer mb-0 pb-0">
         <i class="pi pi-bars" style="font-size: 1.5rem; margin: 0; padding: 0"></i>
@@ -14,13 +14,15 @@
       </div>
     </div>
     <p-drawer [(visible)]="showDrawer" position="full" header="KernelCash">
-      <kc-side-nav />
+      <kc-side-nav (closeNav)="showDrawer = false" />
     </p-drawer>
   }
-  <div class="h-full md:ml-[12rem] lg:ml-[16rem] md:p-1 md:pt-4 lg:p-4 overflow-y-auto">
-    <div class="px-4 pb-4">
+  <div class="h-full md:ml-[12rem] lg:ml-[16rem] xl:p-4 2xl:grid 2xl:grid-cols-12 2xl:overflow-hidden overflow-y-auto">
+    <div class="px-4 pb-4 2xl:col-start-2 2xl:col-end-10 overflow-y-hidden">
       <h1 class="text-3xl mb-4">{{ pageTitle() }}</h1>
-      <router-outlet />
+      <div class="h-full overflow-y-auto">
+        <router-outlet />
+      </div>
     </div>
   </div>
 </div>
