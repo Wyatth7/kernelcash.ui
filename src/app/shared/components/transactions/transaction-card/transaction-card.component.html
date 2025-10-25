@@ -6,6 +6,7 @@
   actionLabel="See All"
 >
   <div class="overflow-y-auto">
-    <kc-transaction-list (dataLoaded)="loading.set(false)" [parameters]="transactionQuery" />
+<!--    <kc-transaction-list (dataLoaded)="loading.set(false)" [parameters]="transactionQuery" />-->
+    <kc-item-list [items]="items()" />
   </div>
 </kc-loading-card>

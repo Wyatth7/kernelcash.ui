@@ -5,5 +5,6 @@
   [shouldLoad]="loading()"
   (actionClicked)="navigateToBudgetPage()"
 >
-  <kc-budget-list [budgetGroupId]="auth.currentUser.budgetGroupId" (dataLoaded)="loading.set(false)" />
+<!--  <kc-budget-list [budgetGroupId]="auth.currentUser.budgetGroupId" (dataLoaded)="loading.set(false)" />-->
+  <kc-item-list [items]="budgetListItems()" />
 </kc-loading-card>
