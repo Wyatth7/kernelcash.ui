@@ -45,15 +45,9 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
   }
 
   private mapBudgetToList(budget: BudgetView): ItemList[] {
-    const groupedItems = budget.spendingBuckets.reduce((itemList: ItemList[], bucket) => {
+    return budget.spendingBuckets.reduce((itemList: ItemList[], bucket) => {
       const category = bucket.category;
       const currentCategory = itemList.find(i => i.name === category);
-
-      console.log({
-        bucket,
-        category,
-        currentCategory
-      })
 
       if (!currentCategory) {
         itemList.push({
@@ -76,8 +70,5 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
 
       return itemList;
     }, [])
-
-    console.log(groupedItems);
-    return groupedItems;
   }
 }
