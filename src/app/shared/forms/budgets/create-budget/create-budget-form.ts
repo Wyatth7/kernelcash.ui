@@ -8,8 +8,8 @@ import {
   ValidatorFn,
   Validators
 } from '@angular/forms';
-import {CreateFullBudget} from '../../../models/budgets/create-full-budget';
-import {SpendingBucketType} from '../../../models/budgets/spending-bucket-type';
+import {CreateBudget} from '../../../models/budgets/create-budget';
+import {SpendingBucketType} from '../../../models/budgets/spending-buckets/spending-bucket-type';
 
 export function createBudgetForm(formBuilder: FormBuilder): FormGroup<CreateBudgetForm> {
   return formBuilder.group<CreateBudgetForm>({
@@ -28,14 +28,14 @@ export function createSpendingBucketForm(formBuilder: FormBuilder): FormGroup<Sp
   })
 }
 
-export function getFullBudgetValue(form: FormGroup<CreateBudgetForm>): CreateFullBudget {
+export function getFullBudgetValue(form: FormGroup<CreateBudgetForm>): CreateBudget {
   const values = form.getRawValue();
   return {
     name: values.budgetName,
     amount: values.incomeSpendingBuckets.map(i => i.total).reduce((a, b) => a + b, 0),
     spendingBuckets: [
-      ...values.incomeSpendingBuckets.map(i => ({total: i.total, name: i.name, spendingBucketType: SpendingBucketType.Income})),
-      ...values.expenseSpendingBuckets.map(e => ({name: e.name, total: e.total, spendingBucketType: SpendingBucketType.Expense}))
+      ...values.incomeSpendingBuckets.map(i => ({total: i.total, name: i.name, spendingBucketType: SpendingBucketType.Income, category: ''})),
+      ...values.expenseSpendingBuckets.map(e => ({name: e.name, total: e.total, spendingBucketType: SpendingBucketType.Expense, category: ''}))
     ]
   }
 }

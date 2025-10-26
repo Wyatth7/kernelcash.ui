@@ -1,6 +1,5 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {LoadingCardComponent} from '../../loading-card/loading-card.component';
-import {TransactionListComponent} from '../transaction-list/transaction-list.component';
+import {DataCard} from '../../loading-card/data-card';
 import {TransactionQuery} from '../../../models/transactions/transaction-query';
 import {TransactionQueryParams} from '../../../models/transactions/transaction-query-params';
 import {TransactionQueryItem} from '../../../models/transactions/transaction-query-item';
@@ -10,8 +9,7 @@ import {ItemListComponent, ItemListItem} from '../../item-list/item-list.compone
 @Component({
   selector: 'kc-transaction-card',
   imports: [
-    LoadingCardComponent,
-    TransactionListComponent,
+    DataCard,
     ItemListComponent
   ],
   templateUrl: 'transaction-card.component.html'

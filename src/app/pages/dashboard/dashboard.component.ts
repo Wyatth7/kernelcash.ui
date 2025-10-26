@@ -14,7 +14,7 @@ import {PageComponent} from '../../shared/components/page/page.component';
   templateUrl: 'dashboard.component.html'
 })
 export class DashboardComponent extends PageComponent {
-  override pageTitle = 'My Dashboard'
+  override defaultPageTitle = 'My Dashboard'
 
   protected readonly loading = signal<boolean>(true);
 }

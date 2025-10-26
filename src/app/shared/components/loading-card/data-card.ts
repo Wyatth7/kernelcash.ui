@@ -4,18 +4,18 @@ import {ProgressSpinner} from 'primeng/progressspinner';
 import {Button} from 'primeng/button';
 
 @Component({
-  selector: 'kc-loading-card',
+  selector: 'kc-data-card',
   imports: [
     Card,
     ProgressSpinner,
     Button
   ],
-  templateUrl: 'loading-card.component.html'
+  templateUrl: 'data-card.html'
 })
-export class LoadingCardComponent {
+export class DataCard {
   public readonly title = input<string>();
   public readonly icon = input<string>();
-  public readonly shouldLoad = input.required<boolean>();
+  public readonly shouldLoad = input<boolean>();
   public readonly customAction = input<boolean>();
   public readonly actionLabel = input<string>();
 

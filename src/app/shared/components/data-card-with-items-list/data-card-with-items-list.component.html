@@ -1,0 +1,12 @@
+<div class="flex flex-col gap-4">
+  @for (item of itemList(); track item) {
+    <kc-data-card
+      [title]="item.name"
+      [icon]="item.icon"
+      [actionLabel]="item.actionText"
+      (actionClicked)="actionClicked(item)"
+    >
+      <kc-item-list [items]="item.items" />
+    </kc-data-card>
+  }
+</div>

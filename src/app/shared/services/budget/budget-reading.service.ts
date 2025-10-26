@@ -6,6 +6,7 @@ import {OkApiResponseWithData} from '../../models/api-response/ok-api-response-w
 import {BudgetQueryListItem} from '../../models/budgets/budget-query-list-item';
 import {Page} from '../../models/pagination/page';
 import {RequestUtils} from '../../utils/request-utils';
+import {BudgetView} from '../../models/budgets/budget-view';
 
 @Injectable({ providedIn: 'root' })
 export class BudgetReadingService {
@@ -26,8 +27,12 @@ export class BudgetReadingService {
     return response.data;
   }
 
-  public async getBudget(budgetId: number): Promise<void> {
+  public async getBudget(budgetId: number): Promise<BudgetView> {
+    const response = await lastValueFrom<OkApiResponseWithData<BudgetView>>(
+      this._http.get<OkApiResponseWithData<BudgetView>>(`${this._basePath}/${budgetId}`)
+    );
 
+    return response.data;
   }
 
 

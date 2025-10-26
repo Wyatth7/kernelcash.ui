@@ -4,14 +4,14 @@ import {Title} from '@angular/platform-browser';
 import {RouterOutlet} from '@angular/router';
 import {AuthenticationService} from './shared/services/authentication.service';
 import {ScreenSizeService} from './shared/services/screen-size.service';
-import {ProgressSpinner} from 'primeng/progressspinner';
+import {SpinnerComponent} from './shared/components/spinner/spinner.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   imports: [
     RouterOutlet,
-    ProgressSpinner
+    SpinnerComponent
   ],
   styleUrl: './app.scss'
 })

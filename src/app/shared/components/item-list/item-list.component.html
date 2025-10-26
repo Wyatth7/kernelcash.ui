@@ -1,21 +1,43 @@
 <p-dataView #dv [value]="items()">
   <ng-template #list let-items>
     @for (item of items; track item; let first = $first) {
-      <div class="flex justify-between items-center gap-2 p-5 px-0 md:px-5"
-           [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
-        <div class="flex items-center gap-4">
-          <p-avatar [label]="item.title?.[0] ?? ''" size="normal" />
-          <div class="flex flex-col gap-0.5">
-            <h4>{{item.title}}</h4>
-            @if (item.subTitle) {
-              <p class="m-0 p-0 text-sm text-gray-400">{{item.subTitle}}</p>
-            }
+      @if (item.linkUrl) {
+        <a
+          [routerLink]="item.linkUrl"
+          class="flex justify-between items-center gap-2 p-5 px-0 md:px-5"
+          [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
+          <div class="flex items-center gap-4">
+            <p-avatar [label]="item.title?.[0] ?? ''" size="normal" />
+            <div class="flex flex-col gap-0.5">
+              <h4>{{item.title}}</h4>
+              @if (item.subTitle) {
+                <p class="m-0 p-0 text-sm text-gray-400">{{item.subTitle}}</p>
+              }
+            </div>
+          </div>
+          <div>
+            <span class="text-nowrap">{{item.value | currency}}</span>
+          </div>
+        </a>
+      } @else {
+        <div
+          (click)="executeAction(item)"
+          class="cursor-pointer flex justify-between items-center gap-2 p-5 px-0 md:px-5"
+          [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
+          <div class="flex items-center gap-4">
+            <p-avatar [label]="item.title?.[0] ?? ''" size="normal" />
+            <div class="flex flex-col gap-0.5">
+              <h4>{{item.title}}</h4>
+              @if (item.subTitle) {
+                <p class="m-0 p-0 text-sm text-gray-400">{{item.subTitle}}</p>
+              }
+            </div>
+          </div>
+          <div>
+            <span class="text-nowrap">{{item.value | currency}}</span>
           </div>
         </div>
-        <div>
-          <span class="text-nowrap">{{item.value | currency}}</span>
-        </div>
-      </div>
+      }
     }
   </ng-template>
 </p-dataView>

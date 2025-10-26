@@ -1,11 +1,11 @@
 import {inject, Injectable} from '@angular/core';
-import {SpendingBucketBase} from '../../models/budgets/spending-bucket-base';
+import {SpendingBucketBase} from '../../models/budgets/spending-buckets/spending-bucket-base';
 import {BudgetBase} from '../../models/budgets/budget-base';
 import {environment} from '../../../../environments/environment';
 import {lastValueFrom} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {OkApiResponseWithData} from '../../models/api-response/ok-api-response-with-data';
-import {CreateFullBudget} from '../../models/budgets/create-full-budget';
+import {CreateBudget} from '../../models/budgets/create-budget';
 
 @Injectable({ providedIn: 'root' })
 export class BudgetWriteService {
@@ -40,7 +40,7 @@ export class BudgetWriteService {
     return response.data;
   }
 
-  public async createFullBudget(budgetGroupId: number, budget: CreateFullBudget): Promise<number> {
+  public async createFullBudget(budgetGroupId: number, budget: CreateBudget): Promise<number> {
     const response = await lastValueFrom(this._http.post<OkApiResponseWithData<number>>(
       `${this._basePath}/${budgetGroupId}/full`,
       {...budget}

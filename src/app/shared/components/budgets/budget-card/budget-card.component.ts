@@ -1,17 +1,15 @@
 import {Component, inject, input, OnInit, signal} from '@angular/core';
-import {LoadingCardComponent} from '../../loading-card/loading-card.component';
-import {BudgetListComponent} from '../budget-list/budget-list.component';
+import {DataCard} from '../../loading-card/data-card';
 import {AuthenticationService} from '../../../services/authentication.service';
 import {Router} from '@angular/router';
 import {Page} from '../../../models/pagination/page';
 import {BudgetReadingService} from '../../../services/budget/budget-reading.service';
 import {ItemListComponent, ItemListItem} from '../../item-list/item-list.component';
-import {formatCurrency} from '@angular/common';
 
 @Component({
   selector: 'kc-budget-card',
   imports: [
-    LoadingCardComponent,
+    DataCard,
     ItemListComponent
   ],
   templateUrl: 'budget-card.component.html'
@@ -38,11 +36,11 @@ export class BudgetCardComponent implements OnInit {
       data.map(b => ({
         title: b.name,
         subTitle: b.budgetGroupName,
-        value: b.amount
+        value: b.amount,
+        linkUrl: '../budgets/' + b.budgetId.toString()
       }))
     )
 
-    console.log(this.budgetListItems())
     this.loading.set(false);
   }
 

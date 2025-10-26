@@ -16,12 +16,10 @@ export const routes: Routes = [
       {
         path: 'budgets',
         component: BudgetHomePageComponent,
-        children: [
-          {
-            path: ':budgetId',
-            component: BudgetViewerComponent
-          }
-        ]
+      },
+      {
+        path: 'budgets/:budgetId',
+        component: BudgetViewerComponent
       },
       {
         path: '**',

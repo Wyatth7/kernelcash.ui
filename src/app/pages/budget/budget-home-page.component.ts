@@ -17,7 +17,7 @@ import {BudgetCardComponent} from '../../shared/components/budgets/budget-card/b
   templateUrl: 'budget-home-page.component.html'
 })
 export class BudgetHomePageComponent extends PageComponent {
-  override pageTitle = 'My Budgets';
+  override defaultPageTitle = 'My Budgets';
 
   protected showCreateForm: boolean = false;
 }

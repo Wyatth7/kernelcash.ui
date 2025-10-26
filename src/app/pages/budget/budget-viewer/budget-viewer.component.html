@@ -1,0 +1,9 @@
+@defer (when !loading()) {
+  <kc-data-card-with-item-list
+    [itemList]="spendingBucketItemList()"
+  />
+} @placeholder (minimum 1000ms) {
+  <div class="h-full">
+    <kc-spinner [fullScreen]="false" label="Loading your budget..." />
+  </div>
+}

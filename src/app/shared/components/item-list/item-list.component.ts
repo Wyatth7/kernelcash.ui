@@ -2,12 +2,13 @@ import {Component, input} from '@angular/core';
 import {Avatar} from 'primeng/avatar';
 import {CurrencyPipe, NgClass} from '@angular/common';
 import {DataView} from 'primeng/dataview';
+import {RouterLink} from '@angular/router';
 
 export type ItemListItem = {
   title: string;
-  subTitle: string;
   value: string | number;
-  link?: boolean;
+  subTitle?: string;
+  linkUrl?: string;
   onClick?: () => Promise<void>;
 }
 
@@ -17,12 +18,15 @@ export type ItemListItem = {
     Avatar,
     CurrencyPipe,
     DataView,
-    NgClass
+    NgClass,
+    RouterLink
   ],
   templateUrl: 'item-list.component.html'
 })
 export class ItemListComponent {
   public readonly items = input.required<ItemListItem[]>();
 
+  protected async executeAction(item: ItemListItem): Promise<void> {
 
+  }
 }
