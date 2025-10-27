@@ -7,7 +7,6 @@ import {PageService} from '../../services/page.service';
 })
 export class PageComponent implements OnInit {
   private readonly _page = inject(PageService);
-  private _pageTitle: string = ''
 
   protected setPageTitle(title: string): void {
     this._page.pageTitle = title;
@@ -16,6 +15,6 @@ export class PageComponent implements OnInit {
   defaultPageTitle?: string;
 
   ngOnInit() {
-      this.defaultPageTitle = this.defaultPageTitle ?? ''
+      this.setPageTitle(this.defaultPageTitle ?? '');
   }
 }

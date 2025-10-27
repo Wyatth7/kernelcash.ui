@@ -1,8 +1,8 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {
   TransactionCardComponent
-} from '../../shared/components/transactions/transaction-card/transaction-card.component';
-import {BudgetCardComponent} from '../../shared/components/budgets/budget-card/budget-card.component';
+} from './transaction-card/transaction-card.component';
+import {BudgetCardComponent} from './budget-card/budget-card.component';
 import {PageComponent} from '../../shared/components/page/page.component';
 
 @Component({

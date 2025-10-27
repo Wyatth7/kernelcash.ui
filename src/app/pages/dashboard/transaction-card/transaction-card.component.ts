@@ -1,10 +1,10 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {DataCard} from '../../loading-card/data-card';
-import {TransactionQuery} from '../../../models/transactions/transaction-query';
-import {TransactionQueryParams} from '../../../models/transactions/transaction-query-params';
-import {TransactionQueryItem} from '../../../models/transactions/transaction-query-item';
-import {TransactionService} from '../../../services/transaction.service';
-import {ItemListComponent, ItemListItem} from '../../item-list/item-list.component';
+import {DataCard} from '../../../shared/components/loading-card/data-card';
+import {TransactionQuery} from '../../../shared/models/transactions/transaction-query';
+import {TransactionQueryParams} from '../../../shared/models/transactions/transaction-query-params';
+import {TransactionQueryItem} from '../../../shared/models/transactions/transaction-query-item';
+import {TransactionService} from '../../../shared/services/transaction.service';
+import {ItemListComponent, ItemListItem} from '../../../shared/components/item-list/item-list.component';
 
 @Component({
   selector: 'kc-transaction-card',
@@ -34,7 +34,7 @@ export class TransactionCardComponent implements OnInit {
 
     this.items.set(transactions.map(t => ({
         title: t.name,
-        subTitle: this.getTransactionSubTitle(t),
+        subTitle: this._transactionService.getTransactionSubTitle(t.accountName, t.accountNumber),
         value: t.amount
       })
     ));
@@ -51,12 +51,5 @@ export class TransactionCardComponent implements OnInit {
       size: this.transactionQuery?.size ?? 100,
       page: this.transactionQuery?.page ?? 0
     }
-  }
-
-  protected getTransactionSubTitle(transaction: TransactionQueryItem): string {
-    if (transaction.accountName)
-      return transaction.accountName;
-
-    return `Account ending in ${transaction.accountNumber}`;
   }
 }

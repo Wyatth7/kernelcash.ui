@@ -7,14 +7,19 @@ import {SpinnerComponent} from '../../../shared/components/spinner/spinner.compo
 import {
   DataCardWithItemsListComponent, ItemList
 } from '../../../shared/components/data-card-with-items-list/data-card-with-items-list.component';
-import {SpendingBucket} from '../../../shared/models/budgets/spending-buckets/spending-bucket';
 import {ItemListItem} from '../../../shared/components/item-list/item-list.component';
+import {DrawerComponent} from '../../../shared/components/drawer/drawer.component';
+import {
+  SelectedSpendingBucketComponent
+} from '../../../shared/components/budgets/selected-spending-bucket/selected-spending-bucket.component';
 
 @Component({
   selector: 'kc-budget-viewer',
   imports: [
     SpinnerComponent,
-    DataCardWithItemsListComponent
+    DataCardWithItemsListComponent,
+    DrawerComponent,
+    SelectedSpendingBucketComponent
   ],
   templateUrl: 'budget-viewer.component.html'
 })
@@ -25,6 +30,9 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
   protected readonly loading = signal<boolean>(true);
   protected readonly budget = signal<BudgetView | undefined>(undefined);
   protected readonly spendingBucketItemList = signal<ItemList[]>([]);
+  protected readonly selectedSpendingBucket = signal<ItemListItem | undefined>(undefined);
+
+  protected readonly showSelectedSpendingBucket = signal<boolean>(false);
 
   public override async ngOnInit(): Promise<void> {
     super.ngOnInit();
@@ -55,7 +63,9 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
           items: [
             {
               title: bucket.name,
-              value: bucket.remaining
+              value: bucket.remaining,
+              id: bucket.spendingBucketId,
+              onClick: this.spendingBucketSelected.bind(this)
             }
           ]
         })
@@ -65,10 +75,17 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
 
       currentCategory.items.push({
         title: bucket.name,
-        value: bucket.remaining
+        value: bucket.remaining,
+        id: bucket.spendingBucketId,
+        onClick: this.spendingBucketSelected.bind(this)
       });
 
       return itemList;
     }, [])
+  }
+
+  protected spendingBucketSelected(item: ItemListItem): void {
+    this.selectedSpendingBucket.set(item);
+    this.showSelectedSpendingBucket.set(true)
   }
 }

@@ -7,3 +7,7 @@
     <kc-spinner [fullScreen]="false" label="Loading your budget..." />
   </div>
 }
+
+<kc-drawer [(visible)]="showSelectedSpendingBucket">
+  <kc-selected-spending-bucket [spendingBucketId]="+(selectedSpendingBucket()?.id ?? 0)" />
+</kc-drawer>

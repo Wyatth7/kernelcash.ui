@@ -1,10 +1,10 @@
 import {Component, inject, input, OnInit, signal} from '@angular/core';
-import {DataCard} from '../../loading-card/data-card';
-import {AuthenticationService} from '../../../services/authentication.service';
+import {DataCard} from '../../../shared/components/loading-card/data-card';
+import {AuthenticationService} from '../../../shared/services/authentication.service';
 import {Router} from '@angular/router';
-import {Page} from '../../../models/pagination/page';
-import {BudgetReadingService} from '../../../services/budget/budget-reading.service';
-import {ItemListComponent, ItemListItem} from '../../item-list/item-list.component';
+import {Page} from '../../../shared/models/pagination/page';
+import {BudgetReadingService} from '../../../shared/services/budget/budget-reading.service';
+import {ItemListComponent, ItemListItem} from '../../../shared/components/item-list/item-list.component';
 
 @Component({
   selector: 'kc-budget-card',

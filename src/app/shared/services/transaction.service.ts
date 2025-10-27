@@ -22,4 +22,11 @@ export class TransactionService {
 
     return response.data;
   }
+
+  public getTransactionSubTitle(accountName: string, accountNumber: number): string {
+    if (accountName)
+      return accountName;
+
+    return `Account ending in ${accountNumber}`;
+  }
 }

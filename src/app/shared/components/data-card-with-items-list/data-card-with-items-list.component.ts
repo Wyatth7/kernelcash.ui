@@ -23,6 +23,5 @@ export class DataCardWithItemsListComponent {
   public readonly itemList = input.required<ItemList[]>()
 
   protected async actionClicked(item: ItemList): Promise<void> {
-
   }
 }
