@@ -1,4 +1,4 @@
-@defer (when selectedSpendingBucket()) {
+@if (selectedSpendingBucket()) {
   <div class="flex flex-col gap-10">
     <div class="flex justify-between">
       <div>
@@ -17,12 +17,28 @@
     </div>
     <div class="flex flex-col">
       <div class="flex justify-between items-center">
-        <h5 class="text-lg text-gray-400">Transactions</h5>
-        <p-button label="Add" icon="pi pi-plus" severity="info" size="small" variant="outlined" />
+        <h5 class="text-lg text-gray-400">{{ existingTransactionView() ? 'Transactions' : 'New Transactions' }}</h5>
+        <div class="flex gap-2">
+
+        @if (existingTransactionView()) {
+          <p-button label="Edit" variant="outlined" size="small" icon="pi pi-pencil"/>
+        }
+        <p-button
+          (click)="transactionAction()"
+          [label]="existingTransactionView() ? 'Add' : 'Done'"
+          [icon]="existingTransactionView() ? 'pi pi-plus' : 'pi pi-check'"
+          [severity]="existingTransactionView() ? 'info' : 'success'"
+          size="small"
+          variant="outlined" />
+        </div>
       </div>
-      <kc-item-list [items]="transactions()" />
+      @if (existingTransactionView()) {
+        <kc-item-list [items]="transactions()" />
+      } @else {
+        <kc-item-list [items]="unallocatedTransactionsListItems()" />
+      }
     </div>
   </div>
-} @placeholder (minimum 1500ms) {
+} @else {
   <kc-spinner [fullScreen]="false" />
 }

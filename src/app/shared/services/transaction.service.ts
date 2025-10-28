@@ -6,6 +6,7 @@ import {OkApiResponseWithData} from '../models/api-response/ok-api-response-with
 import {RequestUtils} from '../utils/request-utils';
 import {TransactionQueryParams} from '../models/transactions/transaction-query-params';
 import {TransactionQueryItem} from '../models/transactions/transaction-query-item';
+import {UnallocatedTransaction} from '../models/transactions/unallocated-transaction';
 
 @Injectable({providedIn: 'root'})
 export class TransactionService {
@@ -19,6 +20,16 @@ export class TransactionService {
     })
 
     const response = await lastValueFrom(request$);
+
+    return response.data;
+  }
+
+  public async getUnallocatedTransactions(startDate: Date, endDate: Date): Promise<UnallocatedTransaction[]> {
+    const params = RequestUtils.getQueryParamsFromObject({startDate, endDate})
+
+    const response = await lastValueFrom<OkApiResponseWithData<UnallocatedTransaction[]>>(
+      this._http.get<OkApiResponseWithData<UnallocatedTransaction[]>>(`${this._basePath}/unallocated`, {params})
+    );
 
     return response.data;
   }

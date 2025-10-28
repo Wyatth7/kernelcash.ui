@@ -36,7 +36,9 @@ export function getFullBudgetValue(form: FormGroup<CreateBudgetForm>): CreateBud
     spendingBuckets: [
       ...values.incomeSpendingBuckets.map(i => ({total: i.total, name: i.name, spendingBucketType: SpendingBucketType.Income, category: ''})),
       ...values.expenseSpendingBuckets.map(e => ({name: e.name, total: e.total, spendingBucketType: SpendingBucketType.Expense, category: ''}))
-    ]
+    ],
+    startDate: new Date(),
+    endDate: new Date()
   }
 }
 

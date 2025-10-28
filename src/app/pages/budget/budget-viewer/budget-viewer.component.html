@@ -9,5 +9,5 @@
 }
 
 <kc-drawer [(visible)]="showSelectedSpendingBucket">
-  <kc-selected-spending-bucket [spendingBucketId]="+(selectedSpendingBucket()?.id ?? 0)" />
+  <kc-selected-spending-bucket [budgetDateRange]="budgetDateRange" [spendingBucketId]="+(selectedSpendingBucket()?.id ?? 0)" />
 </kc-drawer>

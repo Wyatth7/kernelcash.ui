@@ -34,6 +34,10 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
 
   protected readonly showSelectedSpendingBucket = signal<boolean>(false);
 
+  protected get budgetDateRange(): {startDate: Date; endDate: Date;} {
+    return {startDate: this.budget()?.startDate ?? new Date(), endDate: this.budget()?.endDate ?? new Date()};
+  }
+
   public override async ngOnInit(): Promise<void> {
     super.ngOnInit();
 
