@@ -1,0 +1,37 @@
+<div class="flex gap-2 justify-end">
+  @if (!itemAdded() && !itemSplit()) {
+    <p-button
+      styleClass="!text-xs"
+      label="Split"
+      icon="pi pi-arrow-right-arrow-left"
+      size="small"
+      variant="outlined"
+      severity="primary"
+      (click)="splitItem()"
+    />
+    <p-button
+      styleClass="!text-xs"
+      label="Add"
+      icon="pi pi-plus"
+      size="small"
+      variant="outlined"
+      severity="info"
+      (click)="addItem()"
+    />
+  }
+
+  @if (itemSplit()) {
+  }
+
+  @if (itemAdded()) {
+    <p-button
+      styleClass="!text-xs"
+      label="Remove"
+      icon="pi pi-times"
+      size="small"
+      variant="outlined"
+      severity="danger"
+      (click)="removeItem()"
+    />
+  }
+</div>

@@ -1,5 +1,5 @@
 @if (selectedSpendingBucket()) {
-  <div class="flex flex-col gap-10">
+  <div class="flex flex-col gap-10 overflow-hidden h-full">
     <div class="flex justify-between">
       <div>
         <h3 class="text-2xl">{{selectedSpendingBucket()?.name}}</h3>
@@ -9,34 +9,40 @@
         <div>
           <h3 class="text-xl text-blue-300">{{selectedSpendingBucket()?.total | currency}}</h3>
           <p class="m-0 p-0 text-gray-400 text-right">Planned</p>
-        </div>      <div>
-        <h3 class="text-xl text-emerald-400">{{selectedSpendingBucket()?.remaining | currency}}</h3>
+        </div>
+        <div>
+        <h3 class="text-xl text-emerald-400">{{remainingBudgetAmount() | currency}}</h3>
         <p class="m-0 p-0 text-gray-400 text-right">Remaining</p>
       </div>
       </div>
     </div>
-    <div class="flex flex-col">
+    <div class="flex flex-col overflow-y-auto">
       <div class="flex justify-between items-center">
-        <h5 class="text-lg text-gray-400">{{ existingTransactionView() ? 'Transactions' : 'New Transactions' }}</h5>
-        <div class="flex gap-2">
-
+        <h5 class="text-lg text-gray-400">{{ existingTransactionView() ? 'Transactions' : 'Add or create transactions' }}</h5>
+        <div class="flex gap-2 pb-2">
         @if (existingTransactionView()) {
           <p-button label="Edit" variant="outlined" size="small" icon="pi pi-pencil"/>
         }
         <p-button
           (click)="transactionAction()"
-          [label]="existingTransactionView() ? 'Add' : 'Done'"
+          [label]="existingTransactionView() ? 'Add' : 'Save'"
           [icon]="existingTransactionView() ? 'pi pi-plus' : 'pi pi-check'"
           [severity]="existingTransactionView() ? 'info' : 'success'"
           size="small"
           variant="outlined" />
         </div>
       </div>
-      @if (existingTransactionView()) {
-        <kc-item-list [items]="transactions()" />
-      } @else {
-        <kc-item-list [items]="unallocatedTransactionsListItems()" />
-      }
+      <div class="overflow-y-auto">
+        @if (existingTransactionView()) {
+          <kc-item-list [items]="transactions()" />
+        } @else {
+          <kc-item-list [items]="unallocatedTransactionsListItems()">
+            <ng-template #itemAfterTemplate let-item="item">
+              <kc-transaction-actions (spendingTransactionAdded)="spendingBucketTransactionAdded($event)" (spendingTransactionRemoved)="spendingBucketTransactionRemoved($event)" [item]="item" />
+            </ng-template>
+          </kc-item-list>
+        }
+      </div>
     </div>
   </div>
 } @else {

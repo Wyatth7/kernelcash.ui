@@ -7,6 +7,11 @@ import {Button} from 'primeng/button';
 import {ItemListComponent, ItemListItem} from '../../item-list/item-list.component';
 import {TransactionService} from '../../../services/transaction.service';
 import {UnallocatedTransaction} from '../../../models/transactions/unallocated-transaction';
+import {ItemList} from '../../data-card-with-items-list/data-card-with-items-list.component';
+import {
+  SpendingTransactionChanged,
+  TransactionActionsComponent
+} from './transaction-actions/transaction-actions.component';
 
 @Component({
   selector: 'kc-selected-spending-bucket',
@@ -14,7 +19,8 @@ import {UnallocatedTransaction} from '../../../models/transactions/unallocated-t
     SpinnerComponent,
     CurrencyPipe,
     Button,
-    ItemListComponent
+    ItemListComponent,
+    TransactionActionsComponent
   ],
   templateUrl: 'selected-spending-bucket.component.html'
 })
@@ -22,14 +28,18 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
   private readonly _transaction = inject(TransactionService);
   private readonly _spendingBucket = inject(SpendingBucketService);
 
-  private readonly _previousSpendingBucketId!: number;
+  private _previousSpendingBucketId!: number;
+
   public readonly spendingBucketId = input.required<number>();
   public readonly budgetDateRange = input.required<{startDate: Date; endDate: Date}>();
+
   protected readonly selectedSpendingBucket = signal<SelectedSpendingBucketView | undefined>(undefined);
   protected readonly loading = signal<boolean>(true);
-
   protected readonly existingTransactionView = signal<boolean>(true);
   protected readonly unallocatedTransactions = signal<UnallocatedTransaction[]>([]);
+
+  private readonly _spendingBucketTransactionsMap = new Map<number, number>();
+  protected readonly remainingBudgetAmount = signal<number>(0);
 
   protected readonly transactions = computed<ItemListItem[]>(() => {
     if (!this.selectedSpendingBucket())
@@ -47,6 +57,7 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
       return [];
 
     return this.unallocatedTransactions().map(t => ({
+      id: t.transactionId,
       title: t.name,
       subTitle: this._transaction.getTransactionSubTitle(t.accountName, t.accountNumber),
       value: t.amount - t.splitTransactionWithBudgets.reduce((a, b) => a + b.amount, 0),
@@ -54,18 +65,14 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
   });
 
   public async ngOnInit(): Promise<void> {
-
     await this.loadSpendingBucket();
   }
 
-  async ngOnChanges(changes:SimpleChanges): Promise<void> {
-    const change = changes['spendingBucketId']
-    if (change.previousValue === change.currentValue)
+  async ngOnChanges(): Promise<void> {
+    if (this._previousSpendingBucketId === this.spendingBucketId())
       return;
 
-    // if (this._previousSpendingBucketId === this.spendingBucketId())
-    //   return;
-
+    this._previousSpendingBucketId = this.spendingBucketId();
     await this.loadSpendingBucket();
   }
 
@@ -76,7 +83,6 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
       return;
     }
 
-    console.log('here')
     await this.loadUnallocatedTransactions();
   }
 
@@ -90,6 +96,7 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
       .getSpendingBucketAndTransactions(this.spendingBucketId());
 
     this.selectedSpendingBucket.set(spendingBucket);
+    this.remainingBudgetAmount.set(spendingBucket.remaining ?? 0);
 
     this.loading.set(false);
   }
@@ -97,5 +104,26 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
   private async loadUnallocatedTransactions(): Promise<void> {
     const unallocatedTransactions = await this._transaction.getUnallocatedTransactions(this.budgetDateRange().startDate, this.budgetDateRange().endDate);
     this.unallocatedTransactions.set(unallocatedTransactions);
+  }
+
+  protected spendingBucketTransactionAdded(spendingBucketTransaction: SpendingTransactionChanged): void {
+    this._spendingBucketTransactionsMap.set(spendingBucketTransaction.transactionId, spendingBucketTransaction.amount);
+    this.calculateTotalRemaining();
+  }
+
+  protected spendingBucketTransactionRemoved(transactionId: number): void {
+    this._spendingBucketTransactionsMap.delete(transactionId);
+    this.calculateTotalRemaining();
+  }
+
+  private calculateTotalRemaining(): void {
+    const newValue = Array.from
+    (this._spendingBucketTransactionsMap.values()).reduce((a, b) => a + b, 0);
+
+    const totalRemaining = this.selectedSpendingBucket()?.remaining ?? 0;
+
+    console.log(newValue)
+    this.remainingBudgetAmount.set((totalRemaining + newValue));
+    console.log(this.remainingBudgetAmount())
   }
 }

@@ -1,6 +1,6 @@
-import {Component, input} from '@angular/core';
+import {Component, ContentChild, Directive, input, TemplateRef} from '@angular/core';
 import {Avatar} from 'primeng/avatar';
-import {CurrencyPipe, NgClass} from '@angular/common';
+import {CurrencyPipe, NgClass, NgTemplateOutlet} from '@angular/common';
 import {DataView} from 'primeng/dataview';
 import {RouterLink} from '@angular/router';
 
@@ -20,11 +20,15 @@ export type ItemListItem = {
     CurrencyPipe,
     DataView,
     NgClass,
-    RouterLink
+    RouterLink,
+    NgTemplateOutlet
   ],
   templateUrl: 'item-list.component.html'
 })
 export class ItemListComponent {
+  @ContentChild('itemBeforeTemplate') itemBeforeTemplate!: TemplateRef<any>;
+  @ContentChild('itemAfterTemplate') itemAfterTemplate!: TemplateRef<any>;
+
   public readonly items = input.required<ItemListItem[]>();
 
   protected async executeAction(item: ItemListItem): Promise<void> {
