@@ -111,25 +111,10 @@
               </p>
             </div>
             <div class="mt-4">
-              <p-fileupload
-                [fileLimit]="5"
-                [multiple]="true"
-                name="files"
-                accept=".ofx"
-                mode="advanced"
-                [showUploadButton]="false"
-                [showCancelButton]="false"
-                [auto]="true"
-                [withCredentials]="true"
-                [url]="uploadUrl"
-                [headers]="headers"
-                (onBeforeUpload)="transactionsUploading.set(true)"
-                (onUpload)="transactionsUploading.set(false)"
-              >
-                <ng-template #empty>
-                  <div class="py-5">Drag and drop your exported transaction files here.</div>
-                </ng-template>
-              </p-fileupload>
+              <kc-import-transactions
+                (uploadStarted)="transactionsUploading.set(true)"
+                (uploadComplete)="transactionsUploading.set(false)"
+              />
             </div>
             <div class="flex gap-2 mt-10">
               <p-button

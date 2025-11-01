@@ -1,0 +1,31 @@
+<div class="flex flex-col w-full overflow-y-hidden">
+  <div class="flex justify-end">
+    <p-button
+      styleClass="flex justify-end"
+      label="Import Transactions"
+      icon="pi pi-plus"
+      severity="secondary"
+      size="small"
+      (click)="showTransactionImport.set(true)"
+    />
+  </div>
+  <div class="w-full overflow-y-auto mt-4">
+    <kc-data-card
+      title="Transactions"
+      icon="pi-credit-card"
+      [shouldLoad]="loading()"
+    >
+      <kc-item-list [items]="items()" />
+    </kc-data-card>
+  </div>
+</div>
+
+<kc-drawer [(visible)]="showTransactionImport">
+  <div class="flex flex-col gap-2">
+    <div class="mb-4">
+      <h3 class="text-2xl">Import your transactions</h3>
+      <p class="m-0 p-0 text-gray-400">Import transactions from your bank accounts to automatically link with budgets.</p>
+    </div>
+    <kc-import-transactions />
+  </div>
+</kc-drawer>

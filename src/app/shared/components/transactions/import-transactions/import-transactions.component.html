@@ -1,0 +1,19 @@
+<p-fileupload
+  [fileLimit]="5"
+  [multiple]="true"
+  name="files"
+  accept=".ofx"
+  mode="advanced"
+  [showUploadButton]="false"
+  [showCancelButton]="false"
+  [auto]="true"
+  [withCredentials]="true"
+  [url]="uploadUrl"
+  [headers]="headers"
+  (onBeforeUpload)="uploadStarted.emit()"
+  (onUpload)="uploadComplete.emit()"
+>
+  <ng-template #empty>
+    <div class="py-5">Drag and drop your exported transaction files here.</div>
+  </ng-template>
+</p-fileupload>

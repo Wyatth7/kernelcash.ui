@@ -3,6 +3,7 @@ import {DashboardComponent} from './pages/dashboard/dashboard.component';
 import {CoreComponent} from './core/core.component';
 import {BudgetHomePageComponent} from './pages/budget/budget-home-page.component';
 import {BudgetViewerComponent} from './pages/budget/budget-viewer/budget-viewer.component';
+import {TransactionPageComponent} from './pages/transactions/transaction-page.component';
 
 export const routes: Routes = [
   {
@@ -20,6 +21,10 @@ export const routes: Routes = [
       {
         path: 'budgets/:budgetId',
         component: BudgetViewerComponent
+      },
+      {
+        path: 'transactions',
+        component: TransactionPageComponent
       },
       {
         path: '**',

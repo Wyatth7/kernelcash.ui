@@ -19,6 +19,7 @@ import {Message} from 'primeng/message';
 import {CurrencyPipe, NgClass} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {Router} from '@angular/router';
+import {ImportTransactionsComponent} from '../../../transactions/import-transactions/import-transactions.component';
 
 type IncomeExpenseComparison = {
   value: number;
@@ -33,12 +34,12 @@ type IncomeExpenseComparison = {
     InputText,
     FormsModule,
     IconStepComponent,
-    FileUpload,
     ReactiveFormsModule,
     SpendingBucketArrayInputComponent,
     Message,
     NgClass,
-    CurrencyPipe
+    CurrencyPipe,
+    ImportTransactionsComponent
   ],
   templateUrl: 'budget-create-form.component.html'
 })
@@ -48,9 +49,6 @@ export class BudgetCreateFormComponent implements OnInit, OnDestroy {
   private readonly _fb = inject(FormBuilder);
   private readonly _router = inject(Router);
 
-  protected readonly uploadUrl = `${environment.apiUrl}transaction/import`
-  protected readonly headers: HttpHeaders;
-
   protected readonly form = signal<FormGroup<CreateBudgetForm>>(createBudgetForm(this._fb)).asReadonly();
   protected readonly formSubmitting = signal<boolean>(false);
   protected readonly transactionsUploading = signal<boolean>(false);
@@ -59,15 +57,7 @@ export class BudgetCreateFormComponent implements OnInit, OnDestroy {
   private _expenseComparisonSubscription!: Subscription;
 
   protected readonly expenseComparison = signal<IncomeExpenseComparison>({ value: 0, invalid: false });
-
   protected activeStep: number = 1;
-
-  constructor() {
-    const headers = new HttpHeaders();
-
-    headers.set('Authorization', `Bearer ${this._authentication.token}`);
-    this.headers = headers
-  }
 
   public ngOnInit(): void {
     this.form().valueChanges.subscribe(changes => {
@@ -81,7 +71,6 @@ export class BudgetCreateFormComponent implements OnInit, OnDestroy {
         invalid: remaining < 0
       });
     })
-
   }
 
   public ngOnDestroy(): void {
