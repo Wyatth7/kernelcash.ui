@@ -12,6 +12,9 @@ import {
   SpendingTransactionChanged,
   TransactionActionsComponent
 } from './transaction-actions/transaction-actions.component';
+import {
+  CreateSpendingBucketTransaction
+} from '../../../models/budgets/spending-buckets/create-spending-bucket-transaction';
 
 @Component({
   selector: 'kc-selected-spending-bucket',
@@ -79,6 +82,10 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
   protected async transactionAction(): Promise<void> {
     this.existingTransactionView.set(!this.existingTransactionView())
     if (this.existingTransactionView()) {
+      console.log(this._spendingBucketTransactionsMap.size)
+      if (this._spendingBucketTransactionsMap.size > 0)
+        await this.createTransactions();
+
       await this.loadSpendingBucket();
       return;
     }
@@ -106,6 +113,21 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
     this.unallocatedTransactions.set(unallocatedTransactions);
   }
 
+  private async createTransactions(): Promise<void> {
+    const newTransactions: CreateSpendingBucketTransaction[] = [];
+    for (const [transactionId, amount] of this._spendingBucketTransactionsMap.entries())
+      newTransactions.push({transactionId, amount});
+
+
+    const remaining = await this._spendingBucket.createSpendingBucketTransactions(this.spendingBucketId(), newTransactions);
+    if (!remaining)
+      return;
+
+    const selectedBucket = this.selectedSpendingBucket();
+    if (selectedBucket?.remaining)
+      selectedBucket.remaining = remaining;
+  }
+
   protected spendingBucketTransactionAdded(spendingBucketTransaction: SpendingTransactionChanged): void {
     this._spendingBucketTransactionsMap.set(spendingBucketTransaction.transactionId, spendingBucketTransaction.amount);
     this.calculateTotalRemaining();
@@ -122,8 +144,6 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
 
     const totalRemaining = this.selectedSpendingBucket()?.remaining ?? 0;
 
-    console.log(newValue)
     this.remainingBudgetAmount.set((totalRemaining + newValue));
-    console.log(this.remainingBudgetAmount())
   }
 }
