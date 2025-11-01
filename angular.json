@@ -32,7 +32,6 @@
           },
           "configurations": {
             "production": {
-              "allowedHosts": ["dev-cash.the-hardin.family", "localhost"],
               "budgets": [
                 {
                   "type": "initial",
