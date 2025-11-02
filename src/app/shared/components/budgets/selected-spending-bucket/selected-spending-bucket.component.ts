@@ -7,7 +7,6 @@ import {Button} from 'primeng/button';
 import {ItemListComponent, ItemListItem} from '../../item-list/item-list.component';
 import {TransactionService} from '../../../services/transaction.service';
 import {UnallocatedTransaction} from '../../../models/transactions/unallocated-transaction';
-import {ItemList} from '../../data-card-with-items-list/data-card-with-items-list.component';
 import {
   SpendingTransactionChanged,
   TransactionActionsComponent
@@ -35,6 +34,7 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
 
   public readonly spendingBucketId = input.required<number>();
   public readonly budgetDateRange = input.required<{startDate: Date; endDate: Date}>();
+  public readonly resetContent = input<boolean>(false);
 
   protected readonly selectedSpendingBucket = signal<SelectedSpendingBucketView | undefined>(undefined);
   protected readonly loading = signal<boolean>(true);
@@ -72,6 +72,11 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
   }
 
   async ngOnChanges(): Promise<void> {
+    if (this.resetContent()) {
+      this.onResetContent();
+      return;
+    }
+
     if (this._previousSpendingBucketId === this.spendingBucketId())
       return;
 
@@ -145,5 +150,12 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
     const totalRemaining = this.selectedSpendingBucket()?.remaining ?? 0;
 
     this.remainingBudgetAmount.set((totalRemaining + newValue));
+  }
+
+  private onResetContent(): void {
+    this._spendingBucketTransactionsMap.clear();
+    this.existingTransactionView.set(true);
+    this.unallocatedTransactions.set([]);
+    this.remainingBudgetAmount.set(0)
   }
 }

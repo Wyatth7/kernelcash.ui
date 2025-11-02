@@ -1,5 +1,4 @@
-import {Component, input, model, OnChanges, output} from '@angular/core';
-import {BudgetCreateFormComponent} from '../budgets/budget-form/budget-create-form/budget-create-form.component';
+import {Component, input, model, OnChanges, output, signal} from '@angular/core';
 import {Drawer} from 'primeng/drawer';
 
 @Component({
@@ -8,36 +7,23 @@ import {Drawer} from 'primeng/drawer';
     Drawer
   ],
   template: `
-
-    <p-drawer
-      [(visible)]="visible"
-      position="right"
-      styleClass="!w-full  md:!w-[30rem]">
-      <ng-content></ng-content>
-    </p-drawer>
-
+    @if (visible()) {
+      <p-drawer
+        (onHide)="killContent.set(true); killContent.set(false)"
+        [(visible)]="visible"
+        position="right"
+        styleClass="!w-full  md:!w-[30rem]">
+        @if (!killContent()) {
+            <ng-content></ng-content>
+        }
+      </p-drawer>
+    }
   `
 })
-export class DrawerComponent implements OnChanges {
-  // public readonly showDrawer = input.required<boolean>();
+export class DrawerComponent {
   public readonly closed = output<void>();
 
   public readonly visible = model(false)
 
-  // protected _visible: boolean = false;
-  //
-  // protected set visible(visible: boolean) {
-  //   this._visible = visible;
-  //
-  //   if (!visible)
-  //     this.closed.emit();
-  // }
-  //
-  // protected get visible(): boolean {
-  //   return this._visible;
-  // }
-
-  ngOnChanges(): void {
-    // this.visible = this.showDrawer();
-  }
+  public readonly killContent = signal<boolean>(false)
 }
