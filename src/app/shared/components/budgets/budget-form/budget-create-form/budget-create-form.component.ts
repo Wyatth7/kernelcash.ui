@@ -20,6 +20,8 @@ import {CurrencyPipe, NgClass} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {Router} from '@angular/router';
 import {ImportTransactionsComponent} from '../../../transactions/import-transactions/import-transactions.component';
+import {DatePicker, DatePickerModule} from 'primeng/datepicker';
+import {FluidModule} from 'primeng/fluid';
 
 type IncomeExpenseComparison = {
   value: number;
@@ -39,7 +41,10 @@ type IncomeExpenseComparison = {
     Message,
     NgClass,
     CurrencyPipe,
-    ImportTransactionsComponent
+    ImportTransactionsComponent,
+    DatePickerModule,
+    FormsModule,
+    FluidModule
   ],
   templateUrl: 'budget-create-form.component.html'
 })

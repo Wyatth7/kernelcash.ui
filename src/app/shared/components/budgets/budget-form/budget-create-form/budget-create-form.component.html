@@ -17,7 +17,23 @@
               <label for="budgetName">Budget Name</label>
               <input pInputText id="budgetName" placeholder="October" formControlName="budgetName" />
             </div>
-            <p-button [disabled]="form().controls.budgetName.invalid" styleClass="mt-8" label="Next" (onClick)="activateCallback(2)" />
+            <div class="flex gap-2 mt-1">
+              <div class="flex-1 w-full">
+                <label class="block mb-2">Start Date</label>
+                <p-fluid>
+                  <p-datepicker [maxDate]="form().controls.endDate.value"
+                                formControlName="startDate" [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay" />
+                </p-fluid>
+              </div>
+              <div class="flex-1">
+                <label class="block mb-2">End Date</label>
+                <p-fluid>
+                  <p-datepicker [minDate]="form().controls.startDate.value" formControlName="endDate" [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay" />
+                </p-fluid>
+              </div>
+            </div>
+
+            <p-button [disabled]="form().controls.budgetName.invalid || form().controls.startDate.invalid || form().controls.endDate.invalid" styleClass="mt-8" label="Next" (onClick)="activateCallback(2)" />
           </div>
         </ng-template>
       </p-step-panel>
@@ -33,14 +49,14 @@
         <ng-template #content let-activateCallback="activateCallback">
           <div class="py-6">
 
-          <div class=" flex flex-col gap-2 mb-10">
+          <div class="flex flex-col gap-2 mb-10">
             <h3 class="text-2xl">Add your income</h3>
             <p class="m-0 p-0 text-gray-400">
               Split your income into special buckets such as paycheck 1/2, paycheck 2/2,
               pressure washing business, and cleaning business.
             </p>
           </div>
-            <kc-spending-bucket-array-input [spendingBucketFormArray]="form().controls.incomeSpendingBuckets" />
+            <kc-spending-bucket-array-input defaultCategory="Income" [requireCategory]="false" [spendingBucketFormArray]="form().controls.incomeSpendingBuckets" />
           <div class="flex gap-2 mt-6">
             <p-button label="Back" severity="secondary" (onClick)="activateCallback(1)" />
             <p-button [disabled]="form().controls.incomeSpendingBuckets.invalid" label="Next" (onClick)="activateCallback(3)"/>

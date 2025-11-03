@@ -5,6 +5,12 @@
         @if (!first) {
           <p-divider type="solid" />
         }
+        @if (requireCategory()) {
+          <div class="flex flex-col gap-1">
+            <label>Category</label>
+            <p-select formControlName="category" [filter]="true" [options]="categories()" />
+          </div>
+        }
         <div class="flex flex-col gap-1">
           <label>Name</label>
           <input pInputText placeholder="Paycheck 1" formControlName="name" />

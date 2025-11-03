@@ -9,6 +9,18 @@ import {
 } from '../../models/budgets/spending-buckets/create-spending-bucket-transaction';
 import {LoggingService} from '../logging.service';
 
+export const DEFAULT_EXPENSE_CATEGORIES = [
+  'Groceries',
+  'Entertainment',
+  'Travel',
+  'Transportation',
+  'Insurance',
+  'Health',
+  'Activities',
+  'Food',
+  'Housing'
+]
+
 @Injectable({ providedIn: 'root' })
 export class SpendingBucketService {
   private readonly _logger = inject(LoggingService);
@@ -33,4 +45,16 @@ export class SpendingBucketService {
     }
   }
 
+  public async getCategories(): Promise<string[]> {
+    try {
+      const result = await lastValueFrom<OkApiResponseWithData<string[]>>(
+        this._http.get<OkApiResponseWithData<string[]>>(`${this._baseUrl}/categories`)
+      );
+
+      const categories = [...result.data, ...DEFAULT_EXPENSE_CATEGORIES];
+      return [...new Set(categories)];
+    } catch (e) {
+      return DEFAULT_EXPENSE_CATEGORIES;
+    }
+  }
 }
