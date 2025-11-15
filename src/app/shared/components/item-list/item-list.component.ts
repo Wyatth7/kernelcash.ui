@@ -11,6 +11,7 @@ export type ItemListItem = {
   subTitle?: string;
   linkUrl?: string;
   onClick?: ((item: ItemListItem) => Promise<void>) | ((item: ItemListItem) => void);
+  [key: string]: unknown;
 }
 
 @Component({
@@ -28,6 +29,7 @@ export type ItemListItem = {
 export class ItemListComponent {
   @ContentChild('itemBeforeTemplate') itemBeforeTemplate!: TemplateRef<any>;
   @ContentChild('itemAfterTemplate') itemAfterTemplate!: TemplateRef<any>;
+  @ContentChild('itemValueTemplate') itemValueTemplate!: TemplateRef<any>;
 
   public readonly items = input.required<ItemListItem[]>();
 

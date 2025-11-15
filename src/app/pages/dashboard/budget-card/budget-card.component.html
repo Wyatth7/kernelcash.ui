@@ -7,5 +7,12 @@
   (actionClicked)="navigateToBudgetPage()"
 >
 <!--  <kc-budget-list [budgetGroupId]="auth.currentUser.budgetGroupId" (dataLoaded)="loading.set(false)" />-->
-  <kc-item-list [items]="budgetListItems()" />
+  <kc-item-list [items]="budgetListItems()" >
+    <ng-template #itemValueTemplate let-item>
+      <div class="flex gap-2">
+        <kc-total-text [total]="item.value" text="Total" severity="info" size="md"/>
+        <kc-total-text [total]="item.remaining" text="Remaining" size="md" />
+      </div>
+    </ng-template>
+  </kc-item-list>
 </kc-data-card>

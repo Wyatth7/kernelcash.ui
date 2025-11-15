@@ -65,6 +65,6 @@ export class AuthenticationService {
    * and will force the user back the cloudflare Zero Trust login page.
    */
   public unauthorized(): void {
-    globalThis.location.reload();
+    this.logout();
   }
 }

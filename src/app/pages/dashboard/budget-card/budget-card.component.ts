@@ -5,12 +5,14 @@ import {Router} from '@angular/router';
 import {Page} from '../../../shared/models/pagination/page';
 import {BudgetReadingService} from '../../../shared/services/budget/budget-reading.service';
 import {ItemListComponent, ItemListItem} from '../../../shared/components/item-list/item-list.component';
+import {TotalTextComponent} from '../../../shared/components/budgets/total-text/total-text.component';
 
 @Component({
   selector: 'kc-budget-card',
   imports: [
     DataCard,
-    ItemListComponent
+    ItemListComponent,
+    TotalTextComponent
   ],
   templateUrl: 'budget-card.component.html'
 })
@@ -38,7 +40,8 @@ export class BudgetCardComponent implements OnInit {
         title: b.name,
         subTitle: b.budgetGroupName,
         value: b.amount,
-        linkUrl: '../budgets/' + b.budgetId.toString()
+        linkUrl: '../budgets/' + b.budgetId.toString(),
+        remaining: b.remaining
       }))
     )
 

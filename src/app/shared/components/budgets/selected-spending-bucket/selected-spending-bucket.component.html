@@ -35,7 +35,7 @@
           <kc-item-list [items]="transactions()" />
         } @else {
           <kc-item-list [items]="unallocatedTransactionsListItems()">
-            <ng-template #itemAfterTemplate let-item="item">
+            <ng-template #itemAfterTemplate let-item>
               <kc-transaction-actions (spendingTransactionAdded)="spendingBucketTransactionAdded($event)" (spendingTransactionRemoved)="spendingBucketTransactionRemoved($event)" [item]="item" />
             </ng-template>
           </kc-item-list>

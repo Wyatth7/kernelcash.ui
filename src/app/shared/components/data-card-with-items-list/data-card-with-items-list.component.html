@@ -5,7 +5,11 @@
       [icon]="item.icon"
       [customAction]="false"
     >
-      <kc-item-list [items]="item.items" />
+      <kc-item-list [items]="item.items">
+        <ng-template #itemValueTemplate let-item>
+          <ng-container *ngTemplateOutlet="valueTemplate; context: {$implicit: item}"></ng-container>
+        </ng-template>
+      </kc-item-list>
     </kc-data-card>
   }
 </div>

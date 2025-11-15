@@ -71,7 +71,8 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
               title: bucket.name,
               value: bucket.remaining,
               id: bucket.spendingBucketId,
-              onClick: this.spendingBucketSelected.bind(this)
+              onClick: this.spendingBucketSelected.bind(this),
+              total: bucket.total
             }
           ]
         })
@@ -83,7 +84,8 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
         title: bucket.name,
         value: bucket.remaining,
         id: bucket.spendingBucketId,
-        onClick: this.spendingBucketSelected.bind(this)
+        onClick: this.spendingBucketSelected.bind(this),
+        total: bucket.total
       });
 
       return itemList;

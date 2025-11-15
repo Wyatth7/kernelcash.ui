@@ -1,7 +1,14 @@
 @defer (when !loading()) {
   <kc-data-card-with-item-list
     [itemList]="spendingBucketItemList()"
-  />
+  >
+    <ng-template #valueTemplate let-item>
+      <div class="flex gap-2">
+        <kc-total-text [total]="item.total" text="Total" severity="info" size="md"/>
+        <kc-total-text [total]="item.value" text="Remaining" size="md" />
+      </div>
+    </ng-template>
+  </kc-data-card-with-item-list>
 } @placeholder (minimum 1000ms) {
   <div class="h-full">
     <kc-spinner [fullScreen]="false" label="Loading your budget..." />

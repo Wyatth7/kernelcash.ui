@@ -13,7 +13,7 @@ export class UserService {
 
   public async getCurrentUser(): Promise<User> {
     const response = await lastValueFrom<OkApiResponseWithData<User>>(
-      this._http.get<OkApiResponseWithData<User>>(this._baseUrl + '/current')
+      this._http.get<OkApiResponseWithData<User>>(this._baseUrl + 'current')
     )
 
     return response.data;
