@@ -7,12 +7,10 @@
       </div>
       <div class="flex gap-4 flex-wrap">
         <div>
-          <h3 class="text-xl text-blue-300">{{selectedSpendingBucket()?.total | currency}}</h3>
-          <p class="m-0 p-0 text-gray-400 text-right">Planned</p>
+          <kc-total-text [total]="selectedSpendingBucket()?.total || 0" text="Planned" severity="info" />
         </div>
         <div>
-        <h3 class="text-xl text-emerald-400">{{remainingBudgetAmount() | currency}}</h3>
-        <p class="m-0 p-0 text-gray-400 text-right">Remaining</p>
+          <kc-total-text [total]="remainingBudgetAmount() || 0" text="Remaining" [severity]="remainingBudgetAmount() > 0 ? 'success' : 'danger'" />
       </div>
       </div>
     </div>

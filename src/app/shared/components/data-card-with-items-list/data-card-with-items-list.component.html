@@ -3,8 +3,7 @@
     <kc-data-card
       [title]="item.name"
       [icon]="item.icon"
-      [actionLabel]="item.actionText"
-      (actionClicked)="actionClicked(item)"
+      [customAction]="false"
     >
       <kc-item-list [items]="item.items" />
     </kc-data-card>

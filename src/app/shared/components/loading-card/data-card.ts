@@ -16,7 +16,7 @@ export class DataCard {
   public readonly title = input<string>();
   public readonly icon = input<string>();
   public readonly shouldLoad = input<boolean>();
-  public readonly customAction = input<boolean>();
+  public readonly customAction = input<boolean>(false);
   public readonly actionLabel = input<string>();
 
   public readonly actionClicked = output<void>();

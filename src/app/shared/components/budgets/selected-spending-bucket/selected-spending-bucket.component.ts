@@ -1,4 +1,4 @@
-import {Component, computed, inject, input, OnChanges, OnInit, signal, SimpleChanges} from '@angular/core';
+import {Component, computed, inject, input, OnChanges, OnInit, output, signal, SimpleChanges} from '@angular/core';
 import {SpendingBucketService} from '../../../services/budget/spending-bucket.service';
 import {SelectedSpendingBucketView} from '../../../models/budgets/spending-buckets/selected-spending-bucket-view';
 import {SpinnerComponent} from '../../spinner/spinner.component';
@@ -14,15 +14,16 @@ import {
 import {
   CreateSpendingBucketTransaction
 } from '../../../models/budgets/spending-buckets/create-spending-bucket-transaction';
+import {TotalTextComponent} from '../total-text/total-text.component';
 
 @Component({
   selector: 'kc-selected-spending-bucket',
   imports: [
     SpinnerComponent,
-    CurrencyPipe,
     Button,
     ItemListComponent,
-    TransactionActionsComponent
+    TransactionActionsComponent,
+    TotalTextComponent
   ],
   templateUrl: 'selected-spending-bucket.component.html'
 })
@@ -35,6 +36,7 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
   public readonly spendingBucketId = input.required<number>();
   public readonly budgetDateRange = input.required<{startDate: Date; endDate: Date}>();
   public readonly resetContent = input<boolean>(false);
+  public readonly reload = output<void>();
 
   protected readonly selectedSpendingBucket = signal<SelectedSpendingBucketView | undefined>(undefined);
   protected readonly loading = signal<boolean>(true);
@@ -123,7 +125,6 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
     for (const [transactionId, amount] of this._spendingBucketTransactionsMap.entries())
       newTransactions.push({transactionId, amount});
 
-
     const remaining = await this._spendingBucket.createSpendingBucketTransactions(this.spendingBucketId(), newTransactions);
     if (!remaining)
       return;
@@ -131,6 +132,8 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
     const selectedBucket = this.selectedSpendingBucket();
     if (selectedBucket?.remaining)
       selectedBucket.remaining = remaining;
+
+    this.reload.emit();
   }
 
   protected spendingBucketTransactionAdded(spendingBucketTransaction: SpendingTransactionChanged): void {
@@ -156,6 +159,5 @@ export class SelectedSpendingBucketComponent implements OnInit, OnChanges {
     this._spendingBucketTransactionsMap.clear();
     this.existingTransactionView.set(true);
     this.unallocatedTransactions.set([]);
-    this.remainingBudgetAmount.set(0)
   }
 }

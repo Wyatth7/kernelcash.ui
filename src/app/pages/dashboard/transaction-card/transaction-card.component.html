@@ -4,6 +4,8 @@
   icon="pi-credit-card"
   [shouldLoad]="loading()"
   actionLabel="See All"
+  (actionClicked)="navigateToTransactions()"
+  [customAction]="true"
 >
   <div class="overflow-y-auto">
     <kc-item-list [items]="items()" />

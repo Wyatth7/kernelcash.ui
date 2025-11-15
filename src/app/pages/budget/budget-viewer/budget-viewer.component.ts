@@ -12,6 +12,7 @@ import {DrawerComponent} from '../../../shared/components/drawer/drawer.componen
 import {
   SelectedSpendingBucketComponent
 } from '../../../shared/components/budgets/selected-spending-bucket/selected-spending-bucket.component';
+import {TotalTextComponent} from '../../../shared/components/budgets/total-text/total-text.component';
 
 @Component({
   selector: 'kc-budget-viewer',
@@ -19,7 +20,8 @@ import {
     SpinnerComponent,
     DataCardWithItemsListComponent,
     DrawerComponent,
-    SelectedSpendingBucketComponent
+    SelectedSpendingBucketComponent,
+    TotalTextComponent
   ],
   templateUrl: 'budget-viewer.component.html'
 })
@@ -44,7 +46,7 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
     await this.loadBudget();
   }
 
-  private async loadBudget(): Promise<void> {
+  protected async loadBudget(): Promise<void> {
     this.loading.set(true);
 
     const response = await this._budget.getBudget(this._route.snapshot.params['budgetId'])

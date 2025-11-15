@@ -5,7 +5,7 @@
         <i [class]="iconClass()" style="font-size: 1.3rem"></i>
         <h1 class="text-2xl">{{title()}}</h1>
       </div>
-      @if (!customAction() || !!actionLabel()) {
+      @if (customAction()) {
         <p-button
           [label]="actionLabel()"
           icon="pi pi-angle-right"

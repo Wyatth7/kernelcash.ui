@@ -3,6 +3,7 @@
   icon="pi pi-receipt"
   actionLabel="See All"
   [shouldLoad]="loading()"
+  [customAction]="showLink()"
   (actionClicked)="navigateToBudgetPage()"
 >
 <!--  <kc-budget-list [budgetGroupId]="auth.currentUser.budgetGroupId" (dataLoaded)="loading.set(false)" />-->

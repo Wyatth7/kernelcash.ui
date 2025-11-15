@@ -20,6 +20,7 @@ export class BudgetCardComponent implements OnInit {
   private readonly _budget = inject(BudgetReadingService);
 
   public readonly page = input<Page>({size: 5, page: 0});
+  public readonly showLink = input<boolean>(true);
 
   protected readonly loading = signal<boolean>(true);
   protected readonly budgetListItems = signal<ItemListItem[]>([]);

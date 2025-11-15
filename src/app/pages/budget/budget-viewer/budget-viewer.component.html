@@ -9,5 +9,18 @@
 }
 
 <kc-drawer [(visible)]="showSelectedSpendingBucket">
-  <kc-selected-spending-bucket [budgetDateRange]="budgetDateRange" [spendingBucketId]="+(selectedSpendingBucket()?.id ?? 0)" [resetContent]="!showSelectedSpendingBucket()" />
+  <kc-selected-spending-bucket
+    (reload)="loadBudget()"
+    [budgetDateRange]="budgetDateRange"
+    [spendingBucketId]="+(selectedSpendingBucket()?.id ?? 0)"
+    [resetContent]="!showSelectedSpendingBucket()" />
 </kc-drawer>
+
+<ng-template #pageTemplate>
+  @if (budget()) {
+    <div class="flex w-full ml-2 gap-2 items-end flex-wrap sm:flex-nowrap">
+      <kc-total-text [column]="false" [total]="budget()?.amount || 0" text="Total" severity="info" />
+      <kc-total-text [column]="false" [total]="budget()?.remaining || 0" text="Remaining" />
+    </div>
+  }
+</ng-template>

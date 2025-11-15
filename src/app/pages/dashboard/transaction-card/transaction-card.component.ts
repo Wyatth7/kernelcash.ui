@@ -5,6 +5,7 @@ import {TransactionQueryParams} from '../../../shared/models/transactions/transa
 import {TransactionQueryItem} from '../../../shared/models/transactions/transaction-query-item';
 import {TransactionService} from '../../../shared/services/transaction.service';
 import {ItemListComponent, ItemListItem} from '../../../shared/components/item-list/item-list.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'kc-transaction-card',
@@ -16,6 +17,7 @@ import {ItemListComponent, ItemListItem} from '../../../shared/components/item-l
 })
 export class TransactionCardComponent implements OnInit {
   private readonly _transactionService = inject(TransactionService);
+  private readonly _router = inject(Router);
 
   protected readonly loading = signal<boolean>(true);
   protected readonly transactionQuery: Partial<TransactionQuery> = {
@@ -40,6 +42,10 @@ export class TransactionCardComponent implements OnInit {
     ));
 
     this.loading.set(false);
+  }
+
+  protected async navigateToTransactions(): Promise<void> {
+    this._router.navigate(['app', 'transactions'])
   }
 
   private get queryValues(): TransactionQueryParams {
