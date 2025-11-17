@@ -4,18 +4,32 @@ import {environment} from '../../../environments/environment';
 import {lastValueFrom} from 'rxjs';
 import {OkApiResponseWithData} from '../models/api-response/ok-api-response-with-data';
 import {RequestUtils} from '../utils/request-utils';
-import {TransactionQueryParams} from '../models/transactions/transaction-query-params';
 import {TransactionQueryItem} from '../models/transactions/transaction-query-item';
 import {UnallocatedTransaction} from '../models/transactions/unallocated-transaction';
+import {TransactionSearch} from '../forms/transactions/transaction-search-form';
+import {Page} from '../models/pagination/page';
+import {DateUtils} from '../utils/date';
 
 @Injectable({providedIn: 'root'})
 export class TransactionService {
   private readonly _http = inject(HttpClient);
   private readonly _basePath = environment.apiUrl + 'transaction'
 
-  public async getTransactions(query: TransactionQueryParams): Promise<TransactionQueryItem[]> {
+  public async getTransactions(query: Partial<TransactionSearch>, page?: Page): Promise<TransactionQueryItem[]> {
+    let dtStart = undefined;
+    let dtEnd = undefined;
+
+    if (query.startDate)
+      dtStart = DateUtils.convertDateToDateTime(query.startDate);
+
+    if (query.endDate)
+      dtEnd = DateUtils.convertDateToDateTime(query.endDate, false)
+
+    delete query.startDate;
+    delete query.endDate;
+
     const request$ = this._http.get<OkApiResponseWithData<TransactionQueryItem[]>>(this._basePath, {
-      params: RequestUtils.getQueryParamsFromObject(query),
+      params: RequestUtils.getQueryParamsFromObject({...query, startDate: dtStart, endDate:  dtEnd,  ...page}, true),
       responseType: 'json'
     })
 

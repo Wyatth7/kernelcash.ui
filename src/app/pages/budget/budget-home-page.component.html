@@ -1,16 +1,18 @@
 <div class="flex flex-col gap-4">
-  <div class="flex items-center justify-end gap-4">
-      <p-button
-        (click)="showCreateForm.set(true)"
-        severity="secondary"
-        label="New Budget"
-        icon="pi pi-plus"
-        size="small" />
-  </div>
   <kc-budget-card [showLink]="false" />
-
 </div>
 
 <kc-drawer [(visible)]="showCreateForm">
   <kc-budget-create-form />
 </kc-drawer>
+
+<ng-template #pageTemplate>
+  <div class="flex justify-end gap-4 w-full items-end">
+    <p-button
+      (click)="showCreateForm.set(true)"
+      severity="secondary"
+      label="New Budget"
+      icon="pi pi-plus"
+      size="small" />
+  </div>
+</ng-template>

@@ -12,6 +12,11 @@ import {
   ImportTransactionsComponent
 } from '../../shared/components/transactions/import-transactions/import-transactions.component';
 import {DrawerComponent} from '../../shared/components/drawer/drawer.component';
+import {
+  TransactionSearchComponent
+} from '../../shared/components/transactions/transaction-search/transaction-search.component';
+import {TransactionSearch} from '../../shared/forms/transactions/transaction-search-form';
+import {DateUtils} from '../../shared/utils/date';
 
 @Component({
   selector: 'kc-transaction-page',
@@ -20,7 +25,8 @@ import {DrawerComponent} from '../../shared/components/drawer/drawer.component';
     DataCard,
     ItemListComponent,
     ImportTransactionsComponent,
-    DrawerComponent
+    DrawerComponent,
+    TransactionSearchComponent
   ],
   templateUrl: 'transaction-page.component.html'
 })
@@ -40,16 +46,21 @@ export class TransactionPageComponent extends PageComponent{
     await this.loadTransactions();
   }
 
-  private async loadTransactions(): Promise<void> {
+  protected async loadTransactions(query?: Partial<TransactionSearch>): Promise<void> {
     this.loading.set(true);
 
+    console.log(query)
     const date = new Date();
-    const transactions = await this._transaction.getTransactions({
-      page: 0,
-      size: 100,
-      startDate: new Date(date.getMonth() - 3).toISOString(),
-      endDate: new Date().toISOString()
-    });
+
+    if (!query) {
+      const dateRange = DateUtils.thisMonth();
+      query = {
+        startDate: dateRange[0],
+        endDate: dateRange[1]
+      }
+    }
+
+    const transactions = await this._transaction.getTransactions(query, {size: 100, page: 0});
 
     this.items.set(transactions.map(t => ({
       title: t.name,

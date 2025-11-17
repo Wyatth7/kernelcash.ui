@@ -6,6 +6,7 @@ import {TransactionQueryItem} from '../../../shared/models/transactions/transact
 import {TransactionService} from '../../../shared/services/transaction.service';
 import {ItemListComponent, ItemListItem} from '../../../shared/components/item-list/item-list.component';
 import {Router} from '@angular/router';
+import {TransactionSearch} from '../../../shared/forms/transactions/transaction-search-form';
 
 @Component({
   selector: 'kc-transaction-card',
@@ -48,14 +49,12 @@ export class TransactionCardComponent implements OnInit {
     this._router.navigate(['app', 'transactions'])
   }
 
-  private get queryValues(): TransactionQueryParams {
+  private get queryValues(): Partial<TransactionSearch> {
     const now = new Date();
 
     return {
-      startDate: new Date(this.transactionQuery?.startDate ?? new Date(now.setMonth(now.getMonth() - 1))).toISOString(),
-      endDate: new Date(this.transactionQuery?.endDate ?? new Date()).toISOString(),
-      size: this.transactionQuery?.size ?? 100,
-      page: this.transactionQuery?.page ?? 0
+      startDate: new Date(this.transactionQuery?.startDate ?? new Date(now.setMonth(now.getMonth() - 1))),
+      endDate: new Date(this.transactionQuery?.endDate ?? new Date()),
     }
   }
 }

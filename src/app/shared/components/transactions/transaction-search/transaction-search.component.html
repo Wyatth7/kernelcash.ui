@@ -1,0 +1,22 @@
+<form [formGroup]="form()" class="flex gap-2 w-full flex-col lg:flex-row">
+  <div class="flex flex-col flex-1">
+    <label class="mb-2">Transaction name</label>
+    <p-fluid>
+     <input pInputText formControlName="name" placeholder="Search by transaction name" pSize="small" fluid/>
+    </p-fluid>
+  </div>
+  <div class="flex-1 w-full">
+    <label class="block mb-2">Start Date</label>
+    <p-fluid>
+      <p-datepicker size="small" [maxDate]="form().controls.endDate.value"
+                    formControlName="startDate" [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay" />
+    </p-fluid>
+  </div>
+  <div class="flex-1 w-full">
+    <label class="block mb-2">End Date</label>
+    <p-fluid>
+      <p-datepicker size="small" [maxDate]="form().controls.endDate.value"
+                    formControlName="endDate" [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay" />
+    </p-fluid>
+  </div>
+</form>

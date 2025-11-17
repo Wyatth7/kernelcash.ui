@@ -1,13 +1,7 @@
 <div class="flex flex-col w-full overflow-y-hidden">
-  <div class="flex justify-end">
-    <p-button
-      styleClass="flex justify-end"
-      label="Import Transactions"
-      icon="pi pi-plus"
-      severity="secondary"
-      size="small"
-      (click)="showTransactionImport.set(true)"
-    />
+  <div class="flex justify-between items-end md:gap-20 flex-col-reverse md:flex-row gap-2">
+    <kc-transaction-search class="w-full" (valueChanges)="loadTransactions($event)"/>
+
   </div>
   <div class="w-full overflow-y-auto mt-4">
     <kc-data-card
@@ -29,3 +23,16 @@
     <kc-import-transactions />
   </div>
 </kc-drawer>
+
+<ng-template #pageTemplate>
+  <div class="w-full justify-end flex items-end">
+    <p-button
+      styleClass="flex justify-end text-nowrap"
+      label="Import Transactions"
+      icon="pi pi-plus"
+      severity="secondary"
+      size="small"
+      (click)="showTransactionImport.set(true)"
+    />
+  </div>
+</ng-template>
