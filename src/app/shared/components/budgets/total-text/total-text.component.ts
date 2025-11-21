@@ -1,7 +1,7 @@
 import {Component, computed, input} from '@angular/core';
 import {CurrencyPipe, NgClass} from '@angular/common';
 
-type Severity = 'success' | 'danger' | 'info';
+type Severity = 'success' | 'danger' | 'info' | 'default';
 type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 @Component({
@@ -34,14 +34,16 @@ export class TotalTextComponent {
       return 'text-emerald-400';
 
     switch (this.severity()) {
-      case "success":
+      case 'default':
+        return '';
+      case 'success':
         return 'text-emerald-400';
-      case "info":
+      case 'info':
         return 'text-blue-300'
-      case "danger":
+      case 'danger':
         return 'text-red-400'
       default:
-        return "text-emerald-400";
+        return 'text-emerald-400';
     }
   })
 

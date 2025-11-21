@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {PageComponent} from '../../../shared/components/page/page.component';
 import {BudgetReadingService} from '../../../shared/services/budget/budget-reading.service';
 import {ActivatedRoute} from '@angular/router';
@@ -35,6 +35,12 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
   protected readonly selectedSpendingBucket = signal<ItemListItem | undefined>(undefined);
 
   protected readonly showSelectedSpendingBucket = signal<boolean>(false);
+
+  protected readonly unallocated = computed<number>(() => {
+    if (!this.budget()?.amount || !this.budget()?.remaining) return 0;
+
+    return (this.budget()?.amount ?? 0) - (this.budget()?.remaining ?? 0);
+  });
 
   protected get budgetDateRange(): {startDate: Date; endDate: Date;} {
     return {startDate: this.budget()?.startDate ?? new Date(), endDate: this.budget()?.endDate ?? new Date()};

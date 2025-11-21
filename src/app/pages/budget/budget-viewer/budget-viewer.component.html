@@ -28,6 +28,9 @@
     <div class="flex w-full ml-2 gap-2 items-end flex-wrap sm:flex-nowrap">
       <kc-total-text [column]="false" [total]="budget()?.amount || 0" text="Total" severity="info" />
       <kc-total-text [column]="false" [total]="budget()?.remaining || 0" text="Remaining" />
+      @if (unallocated() > 0) {
+        <kc-total-text [column]="false" [total]="unallocated()" text="Not budgetted" severity="default" />
+      }
     </div>
   }
 </ng-template>

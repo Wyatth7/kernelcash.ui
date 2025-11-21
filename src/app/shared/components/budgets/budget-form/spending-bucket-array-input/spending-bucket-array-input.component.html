@@ -8,12 +8,13 @@
         @if (requireCategory()) {
           <div class="flex flex-col gap-1">
             <label>Category</label>
-            <p-select formControlName="category" [filter]="true" [options]="categories()" />
+            <p-select formControlName="category" [options]="categories()" [editable]="true"/>
+            <small class="text-gray-400">Enter a new category or select from existing categories.</small>
           </div>
         }
         <div class="flex flex-col gap-1">
           <label>Name</label>
-          <input pInputText placeholder="Paycheck 1" formControlName="name" />
+          <input pInputText [placeholder]="namePlaceholder()" formControlName="name" />
         </div>
         <div class="flex flex-col gap-1">
           <label>Amount</label>

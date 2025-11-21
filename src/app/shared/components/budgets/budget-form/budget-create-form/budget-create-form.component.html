@@ -56,7 +56,11 @@
               pressure washing business, and cleaning business.
             </p>
           </div>
-            <kc-spending-bucket-array-input defaultCategory="Income" [requireCategory]="false" [spendingBucketFormArray]="form().controls.incomeSpendingBuckets" />
+            <kc-spending-bucket-array-input
+              defaultCategory="Income"
+              [requireCategory]="false"
+              [spendingBucketFormArray]="form().controls.incomeSpendingBuckets"
+              namePlaceholder="Paycheck, Side Hustle, ect." />
           <div class="flex gap-2 mt-6">
             <p-button label="Back" severity="secondary" (onClick)="activateCallback(1)" />
             <p-button [disabled]="form().controls.incomeSpendingBuckets.invalid" label="Next" (onClick)="activateCallback(3)"/>
@@ -84,7 +88,7 @@
                 insurance, mortgage/rent, and entertainment.
               </p>
             </div>
-            <kc-spending-bucket-array-input [spendingBucketFormArray]="form().controls.expenseSpendingBuckets" />
+            <kc-spending-bucket-array-input [spendingBucketFormArray]="form().controls.expenseSpendingBuckets" namePlaceholder="Groceries, Insurance, ect." />
             <p
               class="-mt-7 p-0 mb-6"
               [ngClass]="{

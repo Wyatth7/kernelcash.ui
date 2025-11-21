@@ -11,10 +11,11 @@ import {
 import {CreateBudget} from '../../../models/budgets/create-budget';
 import {SpendingBucketType} from '../../../models/budgets/spending-buckets/spending-bucket-type';
 import {DEFAULT_EXPENSE_CATEGORIES} from '../../../services/budget/spending-bucket.service';
+import {CreateSpendingBucket} from '../../../models/budgets/spending-buckets/create-spending-bucket';
 
 export function createBudgetForm(formBuilder: FormBuilder): FormGroup<CreateBudgetForm> {
-  const now = new Date();
-  const nextMonth = new Date(now.setDate(now.getDate() + 1))
+  const now  = new Date();
+  const nextMonth = new Date(now.setMonth(now.getMonth() + 1))
 
   return formBuilder.group<CreateBudgetForm>({
     budgetName: new FormControl<string>(new Date().toLocaleDateString(navigator.language, { month: 'long' }), {validators: [Validators.required], nonNullable: true}),
@@ -27,9 +28,9 @@ export function createBudgetForm(formBuilder: FormBuilder): FormGroup<CreateBudg
   })
 }
 
-export function createSpendingBucketForm(formBuilder: FormBuilder): FormGroup<SpendingBucketForm> {
+export function createSpendingBucketForm(formBuilder: FormBuilder, defaults?: Partial<CreateSpendingBucket>): FormGroup<SpendingBucketForm> {
   return formBuilder.group<SpendingBucketForm>({
-    category: new FormControl<string>(DEFAULT_EXPENSE_CATEGORIES[0], {validators: [Validators.required], nonNullable: true}),
+    category: new FormControl<string>(defaults?.category ?? DEFAULT_EXPENSE_CATEGORIES[0], {validators: [Validators.required], nonNullable: true}),
     name: new FormControl<string>('', {validators: [Validators.required], nonNullable: true}),
     total: new FormControl<number>(0, {validators: [Validators.required, Validators.min(1)], nonNullable: true})
   })
