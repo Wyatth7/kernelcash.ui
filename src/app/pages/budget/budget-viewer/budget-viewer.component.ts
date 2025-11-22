@@ -13,6 +13,7 @@ import {
   SelectedSpendingBucketComponent
 } from '../../../shared/components/budgets/selected-spending-bucket/selected-spending-bucket.component';
 import {TotalTextComponent} from '../../../shared/components/budgets/total-text/total-text.component';
+import {SpendingBucketType} from '../../../shared/models/budgets/spending-buckets/spending-bucket-type';
 
 @Component({
   selector: 'kc-budget-viewer',
@@ -37,9 +38,16 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
   protected readonly showSelectedSpendingBucket = signal<boolean>(false);
 
   protected readonly unallocated = computed<number>(() => {
-    if (!this.budget()?.amount || !this.budget()?.remaining) return 0;
+    if (!this.budget()?.amount || !this.budget()?.spendingBuckets) return 0;
 
-    return (this.budget()?.amount ?? 0) - (this.budget()?.remaining ?? 0);
+    const bucketTotal = this.budget()?.spendingBuckets.reduce((a, b) =>{
+        if (b.spendingBucketType === SpendingBucketType.Income) return a;
+
+        return a + b.total;
+      }
+      , 0);
+
+    return (this.budget()?.amount ?? 0) - (bucketTotal ?? 0);
   });
 
   protected get budgetDateRange(): {startDate: Date; endDate: Date;} {
