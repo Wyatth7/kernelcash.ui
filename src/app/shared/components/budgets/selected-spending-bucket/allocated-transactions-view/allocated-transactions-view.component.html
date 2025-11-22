@@ -1,0 +1,52 @@
+<kc-list-with-actions title="Transactions" [items]="transactionItems()"  >
+  <ng-container actions>
+
+  @if (!isEditing()) {
+    @if (transactionItems().length > 0) {
+
+    <p-button
+      (onClick)="isEditing.set(true)"
+      label="Edit"
+      variant="outlined"
+      size="small"
+      icon="pi pi-pencil" />
+    }
+    <p-button
+      (onClick)="addTransactionClicked()"
+      label="Add"
+      variant="outlined"
+      size="small"
+      severity="info"
+      icon="pi pi-plus"  />
+  } @else {
+    <p-button
+      (onClick)="cancel()"
+      label="Cancel"
+      variant="outlined"
+      size="small"
+      icon="pi pi-times"
+      severity="danger"  />
+    <p-button
+      label="Save"
+      variant="outlined"
+      size="small"
+      icon="pi pi-check"
+      severity="success"  />
+  }
+
+  </ng-container>
+  @if (isEditing()) {
+    <ng-template #actionTemplate let-item>
+      <div class="flex justify-end">
+        <p-button
+          (onClick)="markToRemove(item.spendingBucketTransactionId)"
+          label="Remove"
+          icon="pi pi-times"
+          size="small"
+          styleClass="!text-xs"
+          variant="outlined"
+          severity="danger"  />
+      </div>
+    </ng-template>
+  }
+</kc-list-with-actions>

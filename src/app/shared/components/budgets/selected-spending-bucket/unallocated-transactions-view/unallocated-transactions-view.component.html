@@ -1,0 +1,26 @@
+<kc-list-with-actions title="Add or create transactions" [items]="unallocatedTransactionsListItems()">
+  <ng-container actions>
+    <p-button
+      label="Cancel"
+      icon="pi pi-times"
+      variant="outlined"
+      severity="danger"
+      size="small"
+      (onClick)="cancel()"
+    />
+    <p-button
+      label="Save"
+      icon="pi pi-check"
+      variant="outlined"
+      severity="success"
+      size="small"
+      (onClick)="createTransactions()"
+    />
+  </ng-container>
+  <ng-template #actionTemplate let-item>
+    <kc-transaction-actions
+      (spendingTransactionAdded)="spendingBucketTransactionAdded($event)"
+      (spendingTransactionRemoved)="spendingBucketTransactionRemoved($event)"
+      [item]="item"/>
+  </ng-template>
+</kc-list-with-actions>

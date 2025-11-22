@@ -1,0 +1,15 @@
+<div class="flex flex-col overflow-y-auto max-h-full">
+  <div class="flex justify-between items-center">
+    <h5 class="text-lg text-gray-400">{{ title()  }}</h5>
+    <div class="flex gap-2 pb-2">
+      <ng-content select="[actions]"></ng-content>
+    </div>
+  </div>
+  <div class="overflow-y-auto">
+    <kc-item-list [items]="items()">
+      <ng-template #itemAfterTemplate let-item>
+        <ng-container *ngTemplateOutlet="actionTemplate(); context: {$implicit: item}"></ng-container>
+      </ng-template>
+    </kc-item-list>
+  </div>
+</div>

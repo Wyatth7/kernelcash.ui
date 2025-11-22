@@ -1,5 +1,5 @@
 import {Component, input, output, signal} from '@angular/core';
-import {ItemListItem} from '../../../item-list/item-list.component';
+import {ItemListItem} from '../../../../item-list/item-list.component';
 import {Button} from 'primeng/button';
 
 export type SpendingTransactionChanged = {
