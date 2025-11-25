@@ -1,17 +1,20 @@
 import {Component, computed, inject, input, OnChanges, OnInit, output, signal, SimpleChanges} from '@angular/core';
 import {ListWithActionsComponent} from '../list-with-actions/list-with-actions.component';
 import {
-  SpendingTransactionChanged,
   TransactionActionsComponent
-} from './transaction-actions/transaction-actions.component';
+} from '../transaction-actions/transaction-actions.component';
 import {
   CreateSpendingBucketTransaction
 } from '../../../../models/budgets/spending-buckets/create-spending-bucket-transaction';
 import {SpendingBucketService} from '../../../../services/budget/spending-bucket.service';
-import {ItemListItem} from '../../../item-list/item-list.component';
+import {ItemListComponent, ItemListItem} from '../../../item-list/item-list.component';
 import {TransactionService} from '../../../../services/transaction.service';
 import {UnallocatedTransaction} from '../../../../models/transactions/unallocated-transaction';
 import {Button} from 'primeng/button';
+import {
+  SpendingTransactionChanged,
+  UnallocatedTransactionActionComponent
+} from './unallocated-actions/unallocated-transaction-action.component';
 
 export type BudgetDateRange = {
   startDate: Date;
@@ -22,8 +25,9 @@ export type BudgetDateRange = {
   selector: 'kc-unallocated-transactions-view',
   imports: [
     ListWithActionsComponent,
-    TransactionActionsComponent,
-    Button
+    Button,
+    ItemListComponent,
+    UnallocatedTransactionActionComponent
   ],
   templateUrl: 'unallocated-transactions-view.component.html'
 })
@@ -38,6 +42,8 @@ export class UnallocatedTransactionsViewComponent implements OnInit, OnChanges {
   public readonly remainingValue = output<number>();
   public readonly itemsAdded = output<number>();
 
+  private _previousSpendingBucketId!: number;
+
   private readonly _spendingBucketTransactionsMap = new Map<number, number>();
 
   protected readonly unallocatedTransactions = signal<UnallocatedTransaction[]>([]);
@@ -47,12 +53,17 @@ export class UnallocatedTransactionsViewComponent implements OnInit, OnChanges {
   }
 
   public async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    const spendingBucketIdChanges = changes['spendingBucketId'];
+    if (!spendingBucketIdChanges ||  spendingBucketIdChanges.currentValue === this._previousSpendingBucketId)
+      return;
+
     await this.loadUnallocatedTransactions();
   }
 
   private async loadUnallocatedTransactions(): Promise<void> {
     const unallocatedTransactions = await this._transaction.getUnallocatedTransactions(this.budgetDateRange().startDate, this.budgetDateRange().endDate);
     this.unallocatedTransactions.set(unallocatedTransactions);
+    this._previousSpendingBucketId = this.spendingBucketId();
   }
 
   protected spendingBucketTransactionAdded(spendingBucketTransaction: SpendingTransactionChanged): void {

@@ -1,4 +1,4 @@
-<kc-list-with-actions title="Add or create transactions" [items]="unallocatedTransactionsListItems()">
+<kc-list-with-actions title="Add or create transactions">
   <ng-container actions>
     <p-button
       label="Cancel"
@@ -17,10 +17,12 @@
       (onClick)="createTransactions()"
     />
   </ng-container>
-  <ng-template #actionTemplate let-item>
-    <kc-transaction-actions
-      (spendingTransactionAdded)="spendingBucketTransactionAdded($event)"
-      (spendingTransactionRemoved)="spendingBucketTransactionRemoved($event)"
-      [item]="item"/>
-  </ng-template>
+  <kc-item-list [items]="unallocatedTransactionsListItems()">
+    <ng-template #itemAfterTemplate let-item>
+      <kc-unallocated-transaction-action
+        (spendingTransactionAdded)="spendingBucketTransactionAdded($event)"
+        (spendingTransactionRemoved)="spendingBucketTransactionRemoved($event)"
+        [item]="item"/>
+    </ng-template>
+  </kc-item-list>
 </kc-list-with-actions>

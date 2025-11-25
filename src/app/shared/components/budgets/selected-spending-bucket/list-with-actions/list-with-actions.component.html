@@ -6,10 +6,6 @@
     </div>
   </div>
   <div class="overflow-y-auto">
-    <kc-item-list [items]="items()">
-      <ng-template #itemAfterTemplate let-item>
-        <ng-container *ngTemplateOutlet="actionTemplate(); context: {$implicit: item}"></ng-container>
-      </ng-template>
-    </kc-item-list>
+    <ng-content></ng-content>
   </div>
 </div>

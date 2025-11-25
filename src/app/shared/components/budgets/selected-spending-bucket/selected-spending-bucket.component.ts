@@ -25,8 +25,6 @@ export enum SelectedView {
   templateUrl: 'selected-spending-bucket.component.html'
 })
 export class SelectedSpendingBucketComponent implements OnChanges {
-  private readonly _transaction = inject(TransactionService);
-
   private _previousSpendingBucketId!: number;
 
   public readonly spendingBucketId = input.required<number>();
@@ -60,16 +58,14 @@ export class SelectedSpendingBucketComponent implements OnChanges {
     this.remainingBudgetAmount.set(spendingBucket.remaining ?? 0);
   }
 
-
-
-  protected async transactionsCreated(remaining: number): Promise<void> {
+  protected async actionRun(remaining: number): Promise<void> {
     const selectedBucket = this.selectedSpendingBucket();
     if (selectedBucket?.remaining)
       selectedBucket.remaining = remaining;
 
+    this.selectedView.set(SelectedView.Allocated);
     this.reload.emit();
   }
-
 
   protected calculateTotalRemaining(value: number): void {
     const totalRemaining = this.selectedSpendingBucket()?.remaining ?? 0;
@@ -84,4 +80,5 @@ export class SelectedSpendingBucketComponent implements OnChanges {
   }
 
   protected readonly SelectedView = SelectedView;
+  protected readonly Math = Math;
 }

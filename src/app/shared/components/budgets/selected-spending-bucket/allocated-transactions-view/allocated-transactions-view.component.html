@@ -1,4 +1,4 @@
-<kc-list-with-actions title="Transactions" [items]="transactionItems()"  >
+<kc-list-with-actions title="Transactions" >
   <ng-container actions>
 
   @if (!isEditing()) {
@@ -20,7 +20,7 @@
       icon="pi pi-plus"  />
   } @else {
     <p-button
-      (onClick)="cancel()"
+      (onClick)="reset()"
       label="Cancel"
       variant="outlined"
       size="small"
@@ -31,22 +31,21 @@
       variant="outlined"
       size="small"
       icon="pi pi-check"
-      severity="success"  />
+      severity="success"
+      (onClick)="deallocateTransactions()"
+    />
   }
-
   </ng-container>
-  @if (isEditing()) {
-    <ng-template #actionTemplate let-item>
-      <div class="flex justify-end">
-        <p-button
-          (onClick)="markToRemove(item.spendingBucketTransactionId)"
-          label="Remove"
-          icon="pi pi-times"
-          size="small"
-          styleClass="!text-xs"
-          variant="outlined"
-          severity="danger"  />
-      </div>
+
+  <kc-item-list [items]="transactionItems()">
+    <ng-template #itemAfterTemplate let-item>
+      @if (isEditing()) {
+        <kc-allocated-actions
+          [item]="item"
+          (spendingTransactionAdded)="markToRemove($event)"
+          (spendingTransactionRemoved)="unassignMarkToRemove($event)"
+        />
+      }
     </ng-template>
-  }
+  </kc-item-list>
 </kc-list-with-actions>

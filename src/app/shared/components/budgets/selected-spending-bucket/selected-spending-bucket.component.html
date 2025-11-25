@@ -21,7 +21,10 @@
           (onAddTransactionsClicked)="selectedView.set(SelectedView.Unallocated)"
           [spendingBucketId]="spendingBucketId()"
           (loading)="loading.set($event)"
-          (spendingBucketLoaded)="spendingBucketLoaded($event)" />
+          (spendingBucketLoaded)="spendingBucketLoaded($event)"
+          (remainingValue)="calculateTotalRemaining(Math.abs($event))"
+          (itemsDeallocated)="actionRun(Math.abs($event))"
+        />
       }
       @case(SelectedView.Unallocated) {
         <kc-unallocated-transactions-view
@@ -30,7 +33,7 @@
           (loading)="loading.set($event)"
           (onCancelClicked)="selectedView.set(SelectedView.Allocated)"
           (remainingValue)="calculateTotalRemaining($event)"
-          (itemsAdded)="transactionsCreated($event)"
+          (itemsAdded)="actionRun($event)"
         />
       }
     }

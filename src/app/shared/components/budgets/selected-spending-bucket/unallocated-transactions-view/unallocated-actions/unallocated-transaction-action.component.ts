@@ -1,6 +1,9 @@
 import {Component, input, output, signal} from '@angular/core';
-import {ItemListItem} from '../../../../item-list/item-list.component';
+import {
+  TransactionActionsComponent
+} from '../../transaction-actions/transaction-actions.component';
 import {Button} from 'primeng/button';
+import {ItemListItem} from '../../../../item-list/item-list.component';
 
 export type SpendingTransactionChanged = {
   transactionId: number;
@@ -8,13 +11,14 @@ export type SpendingTransactionChanged = {
 }
 
 @Component({
-  selector: 'kc-transaction-actions',
+  selector: 'kc-unallocated-transaction-action',
   imports: [
+    TransactionActionsComponent,
     Button
   ],
-  templateUrl: 'transaction-actions.component.html'
+  templateUrl: 'unallocated-transaction-action.component.html'
 })
-export class TransactionActionsComponent {
+export class UnallocatedTransactionActionComponent {
   public readonly item = input.required<ItemListItem>();
   public readonly spendingTransactionAdded = output<SpendingTransactionChanged>();
   public readonly spendingTransactionRemoved = output<number>();

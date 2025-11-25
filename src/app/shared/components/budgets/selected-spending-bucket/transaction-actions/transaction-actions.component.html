@@ -1,0 +1,7 @@
+<div class="flex gap-2 justify-end">
+  @if (itemAdded()) {
+    <ng-content select="[item-added]"></ng-content>
+  } @else {
+    <ng-content></ng-content>
+  }
+</div>

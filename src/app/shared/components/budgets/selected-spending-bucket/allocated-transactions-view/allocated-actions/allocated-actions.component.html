@@ -1,0 +1,24 @@
+<kc-transaction-actions [itemAdded]="itemAdded()">
+  <ng-container item-added>
+    <p-button
+      label="Keep"
+      icon="pi pi-check"
+      (onClick)="removeItem()"
+      variant="outlined"
+      size="small"
+      styleClass="!text-xs"
+      severity="info"
+    />
+  </ng-container>
+
+  <ng-container>
+    <p-button
+      (onClick)="addItem()"
+      label="Remove"
+      icon="pi pi-times"
+      size="small"
+      styleClass="!text-xs"
+      variant="outlined"
+      severity="danger"  />
+  </ng-container>
+</kc-transaction-actions>

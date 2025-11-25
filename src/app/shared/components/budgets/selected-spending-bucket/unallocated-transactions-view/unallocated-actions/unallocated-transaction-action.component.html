@@ -1,0 +1,37 @@
+<kc-transaction-actions [itemAdded]="itemAdded()">
+  <ng-container item-added>
+    <p-button
+      styleClass="!text-xs"
+      label="Remove"
+      icon="pi pi-times"
+      size="small"
+      variant="outlined"
+      severity="danger"
+      (click)="removeItem()" />
+  </ng-container>
+
+  <ng-container>
+    @if (itemSplit()) {
+
+    } @else {
+      <p-button
+        styleClass="!text-xs"
+        label="Split"
+        icon="pi pi-arrow-right-arrow-left"
+        size="small"
+        variant="outlined"
+        severity="primary"
+        (click)="splitItem()"
+      />
+      <p-button
+        styleClass="!text-xs"
+        label="Add"
+        icon="pi pi-plus"
+        size="small"
+        variant="outlined"
+        severity="info"
+        (click)="addItem()"
+      />
+    }
+  </ng-container>
+</kc-transaction-actions>

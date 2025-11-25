@@ -9,6 +9,10 @@ import {
 } from '../../models/budgets/spending-buckets/create-spending-bucket-transaction';
 import {LoggingService} from '../logging.service';
 
+type Remainging = {
+  remaining: number;
+}
+
 export const DEFAULT_EXPENSE_CATEGORIES = [
   'Groceries',
   'Entertainment',
@@ -37,10 +41,29 @@ export class SpendingBucketService {
 
   public async createSpendingBucketTransactions(spendingBucketId: number, transactions: CreateSpendingBucketTransaction[]): Promise<number | undefined> {
     try {
-      const result = await lastValueFrom<OkApiResponseWithData<{ remaining: number }>>(this._http.post<OkApiResponseWithData<{ remaining: number }>>(`${this._baseUrl}/${spendingBucketId}`, [...transactions]));
+      const result = await lastValueFrom<OkApiResponseWithData<{ remaining: number }>>
+      (
+        this._http.post<OkApiResponseWithData<Remainging>>(`${this._baseUrl}/${spendingBucketId}`, [...transactions])
+      );
       return result.data.remaining;
     } catch (e) {
       this._logger.error(`Could not create spending bucket transactions for spending bucket [${spendingBucketId}].\n\nException: ${e}`);
+      return undefined;
+    }
+  }
+
+
+  public async deallocateTransactions(spendingBucketTransactionIds: number[], spendingBucketId: number): Promise<number | undefined> {
+    try {
+      const result = await lastValueFrom<OkApiResponseWithData<Remainging>>(
+        this._http.post<OkApiResponseWithData<Remainging>>(`${this._baseUrl}/${spendingBucketId}/deallocate`, {
+          spendingBucketTransactionIds
+        })
+      )
+
+      return result.data.remaining;
+    } catch (e) {
+      this._logger.error(`Could not deallocate spending bucket transactions for spending bucket ${spendingBucketId}. \n\nExeption: ${e}`);
       return undefined;
     }
   }
