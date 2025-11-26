@@ -13,7 +13,6 @@ export class ThemeService {
    * Inits the theme service events.
    */
   public init(): void {
-    console.log(this.userDarkModePreference)
     this.setTheme(this.userDarkModePreference);
     this.listenForEvents();
   }

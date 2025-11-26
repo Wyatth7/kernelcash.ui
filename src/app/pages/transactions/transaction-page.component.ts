@@ -3,11 +3,7 @@ import {PageComponent} from '../../shared/components/page/page.component';
 import {Button} from 'primeng/button';
 import {TransactionService} from '../../shared/services/transaction.service';
 import {ItemListComponent, ItemListItem} from '../../shared/components/item-list/item-list.component';
-import {
-  DataCardWithItemsListComponent
-} from '../../shared/components/data-card-with-items-list/data-card-with-items-list.component';
 import {DataCard} from '../../shared/components/loading-card/data-card';
-import {Drawer} from 'primeng/drawer';
 import {
   ImportTransactionsComponent
 } from '../../shared/components/transactions/import-transactions/import-transactions.component';
@@ -17,6 +13,7 @@ import {
 } from '../../shared/components/transactions/transaction-search/transaction-search.component';
 import {TransactionSearch} from '../../shared/forms/transactions/transaction-search-form';
 import {DateUtils} from '../../shared/utils/date';
+import {ListSortType} from '../../shared/models/enum/list-sort-type';
 
 @Component({
   selector: 'kc-transaction-page',
@@ -49,14 +46,12 @@ export class TransactionPageComponent extends PageComponent{
   protected async loadTransactions(query?: Partial<TransactionSearch>): Promise<void> {
     this.loading.set(true);
 
-    console.log(query)
-    const date = new Date();
-
     if (!query) {
       const dateRange = DateUtils.thisMonth();
       query = {
         startDate: dateRange[0],
-        endDate: dateRange[1]
+        endDate: dateRange[1],
+        transactionDateOrder: ListSortType.descending
       }
     }
 

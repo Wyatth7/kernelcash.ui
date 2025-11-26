@@ -76,7 +76,6 @@ export class AllocatedTransactionsViewComponent implements OnInit, OnChanges {
       .filter(item => !this.spendingBucketTransactionsToRemove()
         .includes(+item.id!)).reduce((a, b) => a + +b.value, 0)
 
-    console.log(value)
     this.remainingValue.emit(value)
   }
 

@@ -1,6 +1,6 @@
 <p-dataView #dv [value]="items()">
   <ng-template #list let-items>
-    @for (item of items; track item; let first = $first) {
+    @for (item of items; track item?.id || $index; let first = $first) {
       @if (item.linkUrl) {
         <a
           [routerLink]="item.linkUrl"
