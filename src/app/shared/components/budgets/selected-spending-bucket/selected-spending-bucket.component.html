@@ -22,7 +22,7 @@
           [spendingBucketId]="spendingBucketId()"
           (loading)="loading.set($event)"
           (spendingBucketLoaded)="spendingBucketLoaded($event)"
-          (remainingValue)="calculateTotalRemaining(Math.abs($event))"
+          (remainingValue)="calculateTotalRemaining($event)"
           (itemsDeallocated)="actionRun(Math.abs($event))"
         />
       }

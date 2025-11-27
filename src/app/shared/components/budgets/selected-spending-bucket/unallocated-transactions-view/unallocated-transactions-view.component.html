@@ -20,6 +20,7 @@
   <kc-item-list [items]="unallocatedTransactionsListItems()">
     <ng-template #itemAfterTemplate let-item>
       <kc-unallocated-transaction-action
+        [shouldClear]="false"
         (spendingTransactionAdded)="spendingBucketTransactionAdded($event)"
         (spendingTransactionRemoved)="spendingBucketTransactionRemoved($event)"
         [item]="item"/>

@@ -1,4 +1,4 @@
-import {Component, inject, input, OnChanges, OnInit, output, signal} from '@angular/core';
+import {Component, computed, inject, input, OnChanges, OnInit, output, signal} from '@angular/core';
 import {SpendingBucketService} from '../../../../services/budget/spending-bucket.service';
 import {SelectedSpendingBucketView} from '../../../../models/budgets/spending-buckets/selected-spending-bucket-view';
 import {ItemListComponent, ItemListItem} from '../../../item-list/item-list.component';
@@ -68,26 +68,30 @@ export class AllocatedTransactionsViewComponent implements OnInit, OnChanges {
     this.spendingBucketTransactionsToRemove().push(spendingBucketTransactionId);
 
     if (this.spendingBucketTransactionsToRemove().length == this.transactionItems().length) {
-      this.remainingValue.emit(this.transactionItems().reduce((a,b)=> a + +b.value, 0));
+      this.remainingValue.emit(Math.abs(this.transactionItems().reduce((a,b)=> a + +b.value, 0)));
       return;
     }
 
-    const value = this.transactionItems()
-      .filter(item => !this.spendingBucketTransactionsToRemove()
-        .includes(+item.id!)).reduce((a, b) => a + +b.value, 0)
-
-    this.remainingValue.emit(value)
+    this.emitRemainingValue();
   }
 
   protected unassignMarkToRemove(spendingBucketTransactionId: number): void {
     this.spendingBucketTransactionsToRemove.set(
       this.spendingBucketTransactionsToRemove().filter(id => id !== spendingBucketTransactionId)
     );
+
+    if (!this.spendingBucketTransactionsToRemove().length) {
+      this.remainingValue.emit(0);
+      return;
+    }
+
+    this.emitRemainingValue();
   }
 
   protected reset(): void {
     this.spendingBucketTransactionsToRemove.set([]);
     this.isEditing.set(false);
+    this.remainingValue.emit(0)
   }
 
   protected async deallocateTransactions(): Promise<void> {
@@ -104,5 +108,21 @@ export class AllocatedTransactionsViewComponent implements OnInit, OnChanges {
   protected addTransactionClicked(): void {
     this.reset();
     this.onAddTransactionsClicked.emit();
+  }
+
+  private getTransactionValueById(spendingBucketTransactionId: number): number {
+    const value = this.transactionItems()
+      .find(t => t.id === spendingBucketTransactionId)?.value ?? 0;
+    return +value;
+  }
+
+  private get totalToRemove(): number {
+    return Math.abs(this.transactionItems()
+      .filter(t => this.spendingBucketTransactionsToRemove().includes(+(t.id ?? 0)))
+      .reduce((a, b) => a + +(b.value ?? 0), 0))
+  }
+
+  private emitRemainingValue(): void {
+    this.remainingValue.emit(this.totalToRemove);
   }
 }

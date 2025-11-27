@@ -1,19 +1,34 @@
 <kc-transaction-actions [itemAdded]="itemAdded()">
+
   <ng-container item-added>
-    <p-button
-      styleClass="!text-xs"
-      label="Remove"
-      icon="pi pi-times"
-      size="small"
-      variant="outlined"
-      severity="danger"
-      (click)="removeItem()" />
+    @if (itemSplit()) {
+      <div class="flex flex-col gap-1">
+        <label class="text-sm">Amount</label>
+        <p-inputnumber
+          size="small"
+          [formControl]="splitAmountControl"
+          inputId="locale-user"
+          mode="currency"
+          currency="USD"
+          placeholder="Income amount"
+        ></p-inputnumber>
+      </div>
+    }
+
+    <div class="flex items-end">
+
+      <p-button
+        styleClass="!text-xs"
+        label="Remove"
+        icon="pi pi-times"
+        size="small"
+        variant="outlined"
+        severity="danger"
+        (click)="removeItem()" />
+    </div>
   </ng-container>
 
   <ng-container>
-    @if (itemSplit()) {
-
-    } @else {
       <p-button
         styleClass="!text-xs"
         label="Split"
@@ -32,6 +47,5 @@
         severity="info"
         (click)="addItem()"
       />
-    }
   </ng-container>
 </kc-transaction-actions>
