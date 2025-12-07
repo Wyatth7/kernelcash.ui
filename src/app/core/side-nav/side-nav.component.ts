@@ -1,23 +1,24 @@
 import {Component, inject, output} from '@angular/core';
-import {Button, ButtonDirective, ButtonIcon} from 'primeng/button';
-import {RouterLink, RouterLinkActive} from '@angular/router';
-import {Menu} from 'primeng/menu';
+import {Button} from 'primeng/button';
+import {RouterLink} from '@angular/router';
 import {MenuItem, MenuItemCommandEvent} from 'primeng/api';
 import {Avatar} from 'primeng/avatar';
 import {AuthenticationService} from '../../shared/services/authentication.service';
+import {CustomDialogService} from '../../shared/services/custom-dialog.service';
+import {UserSettingsComponent} from '../../shared/components/user-settings/user-settings.component';
 
 @Component({
   selector: 'kc-side-nav',
   imports: [
     Button,
     RouterLink,
-    Menu,
     Avatar,
   ],
   templateUrl: 'side-nav.component.html'
 })
 export class SideNavComponent {
   private readonly _authentication = inject(AuthenticationService);
+  private readonly _dialog = inject(CustomDialogService);
 
   protected get currentUserNameFull(): string {
     return `${this._authentication.currentUser.nameFirst} ${this._authentication.currentUser.nameLast}`;
@@ -25,14 +26,15 @@ export class SideNavComponent {
 
   public readonly closeNav = output<void>();
 
-  protected userMenuItems: MenuItem[] = [
-    {
-      label: 'Logout',
-      icon: 'pi pi-sign-out',
-      command: async (event: MenuItemCommandEvent) => {
-        this._authentication.logout();
-      }
-    }
-  ]
+  protected openUserSettings(): void {
+    this._dialog.show(UserSettingsComponent, {
+      showAction: false,
+      showCancel: false,
+      title: 'Settings',
+      message: 'View or modify your account settings.',
+      height: '50%'
+    });
+    this.closeNav.emit();
+  }
 
 }

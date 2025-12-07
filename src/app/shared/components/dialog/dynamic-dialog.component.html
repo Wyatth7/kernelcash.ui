@@ -1,0 +1,28 @@
+<div class="flex flex-col justify-between mt-4 gap-5">
+  @if (title()) {
+    <div class="flex justify-between gap-10">
+      <div class="flex flex-col gap-2">
+        <h3 class="text-2xl">{{title()}}</h3>
+        @if (message()) {
+          <p class="m-0 p-0 text-gray-400">{{message()}}</p>
+        }
+      </div>
+      @if (closable()) {
+        <p-button icon="pi pi-times" (onClick)="close()" variant="text" [rounded]="true"/>
+      }
+    </div>
+  }
+
+  <ng-container *ngComponentOutlet="component()"></ng-container>
+
+  @if (showAction() || showCancel()) {
+    <div class="flex justify-end gap-2">
+      @if (showCancel()) {
+       <p-button [label]="cancelText()" (onClick)="close()" severity="danger" variant="text"/>
+      }
+      @if (showAction()) {
+        <p-button [label]="actionText()" (onClick)="actionClicked()" severity="info" [disabled]="!canUseAction()"/>
+      }
+    </div>
+  }
+</div>

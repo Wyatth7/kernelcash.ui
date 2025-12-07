@@ -6,6 +6,7 @@ import {Noir} from './themes/noir';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {addJwtInterceptor} from './shared/interceptors/add-jwt-interceptor';
+import {DialogService} from 'primeng/dynamicdialog';
 
 
 
@@ -23,6 +24,7 @@ export const appConfig: ApplicationConfig = {
           darkModeSelector: '.app-dark'
         }
       }
-    })
+    }),
+    DialogService
   ]
 };

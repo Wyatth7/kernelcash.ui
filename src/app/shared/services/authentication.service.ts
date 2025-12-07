@@ -53,8 +53,6 @@ export class AuthenticationService {
    * Cloudflare Zero Trust login page.
    */
   public logout(): void {
-    this._logger.info('Logging out user, and redirecting to login.');
-
     globalThis.location.href = environment.logoutUrl;
   }
 

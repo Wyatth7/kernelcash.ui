@@ -1,0 +1,25 @@
+<div class="grid grid-cols-4">
+  <div class="col-span-1">
+    @for (settingGroup of settings(); track settingGroup; let first = $first) {
+      @if (!first) {
+        <span [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }"></span>
+      }
+
+      @if (settingGroup.title) {
+        <h4 class="text-md font-semibold text-gray-400">{{settingGroup.title}}</h4>
+      }
+      @for (setting of settingGroup.settings; track setting) {
+        <p-button [label]="setting.label" size="small" variant="text" (onClick)="settingClicked(setting)" [icon]="setting.icon ? setting.icon : ''"/>
+      }
+    }
+  </div>
+  <div class="col-span-3">
+    @if (activeComponent()) {
+      <ng-container *ngComponentOutlet="activeComponent()"></ng-container>
+    } @else {
+      <div class="w-full flex items-center justify-center">
+        <p class="text-gray-500">No setting selected.</p>
+      </div>
+    }
+  </div>
+</div>
