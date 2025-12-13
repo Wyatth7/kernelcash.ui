@@ -90,7 +90,7 @@ export class BudgetCreateFormComponent implements OnInit, OnDestroy {
       this.formSubmitting.set(true);
       const budgetId = await this._budgetWriter
         .createFullBudget(
-          this._authentication.currentUser.budgetGroupId,
+          this._authentication.getCurrentUser().budgetGroupId,
           getFullBudgetValue(this.form())
         );
 

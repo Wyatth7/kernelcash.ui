@@ -1,0 +1,29 @@
+<div class="grid grid-cols-6 md:grid-cols-4 min-h-[20rem] overflow-x-hidden">
+  <div class="col-span-2 md:col-span-1 flex flex-col">
+    @for (settingGroup of settings(); track settingGroup) {
+      @if (settingGroup.title) {
+        <h4 class="text-md font-semibold text-gray-400">{{settingGroup.title}}</h4>
+      }
+      @for (setting of settingGroup.settings; track setting) {
+        <p-button [id]="setting.id"
+          styleClass="w-full start max-w-[80%]"
+          [label]="setting.label"
+          size="small"
+          variant="text"
+          (onClick)="settingClicked(setting)"
+          [icon]="setting.icon ? setting.icon : ''"/>
+      }
+    }
+  </div>
+  <div class="col-span-4  md:col-span-3 h-full">
+    @if (activeComponent()) {
+      <div class="w-full h-full">
+        <ng-container *ngComponentOutlet="activeComponent()" class="w-full"></ng-container>
+      </div>
+    } @else {
+      <div class="w-full flex items-center justify-center">
+        <p class="text-gray-500">No setting selected.</p>
+      </div>
+    }
+  </div>
+</div>

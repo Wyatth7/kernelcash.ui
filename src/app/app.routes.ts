@@ -4,6 +4,7 @@ import {CoreComponent} from './core/core.component';
 import {BudgetHomePageComponent} from './pages/budget/budget-home-page.component';
 import {BudgetViewerComponent} from './pages/budget/budget-viewer/budget-viewer.component';
 import {TransactionPageComponent} from './pages/transactions/transaction-page.component';
+import {PaymentRequestsComponent} from './pages/payment-requests/payment-requests.component';
 
 export const routes: Routes = [
   {
@@ -12,7 +13,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'home',
-        component: DashboardComponent
+        component: DashboardComponent,
       },
       {
         path: 'budgets',
@@ -25,6 +26,10 @@ export const routes: Routes = [
       {
         path: 'transactions',
         component: TransactionPageComponent
+      },
+      {
+        path: 'payment-requests',
+        component: PaymentRequestsComponent
       },
       {
         path: '**',
