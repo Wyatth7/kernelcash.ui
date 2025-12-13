@@ -13,7 +13,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'home',
-        component: DashboardComponent
+        component: DashboardComponent,
       },
       {
         path: 'budgets',

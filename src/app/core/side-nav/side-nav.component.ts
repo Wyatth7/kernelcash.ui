@@ -32,7 +32,6 @@ export class SideNavComponent {
       showCancel: false,
       title: 'Settings',
       message: 'View or modify your account settings.',
-      height: '50%'
     });
     this.closeNav.emit();
   }

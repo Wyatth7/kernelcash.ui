@@ -1,0 +1,10 @@
+<div class="flex flex-col gap-1 w-full">
+  <label [for]="controlId">{{ label() }}</label>
+  @if (control()) {
+    <p-fluid>
+      <input fluid class="w-full" pInputText [id]="controlId" [placeholder]="placeholder()" [formControl]="control()!" size="small" />
+    </p-fluid>
+  } @else {
+    <ng-content></ng-content>
+  }
+</div>

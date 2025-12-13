@@ -1,4 +1,4 @@
-<div class="flex flex-col justify-between mt-4 gap-5">
+<div class="flex flex-col justify-between mt-4 gap-5 overflow-y-hidden">
   @if (title()) {
     <div class="flex justify-between gap-10">
       <div class="flex flex-col gap-2">
@@ -13,7 +13,11 @@
     </div>
   }
 
-  <ng-container *ngComponentOutlet="component()"></ng-container>
+  <div class="h-full overflow-hidden">
+    <div class="overflow-y-auto">
+      <ng-container *ngComponentOutlet="component()"></ng-container>
+    </div>
+  </div>
 
   @if (showAction() || showCancel()) {
     <div class="flex justify-end gap-2">

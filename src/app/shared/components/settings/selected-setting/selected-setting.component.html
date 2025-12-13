@@ -1,0 +1,43 @@
+<div class="flex flex-col gap-2 h-full w-full">
+  <div class="flex gap-4">
+    <div class="flex flex-col">
+      <div class="flex gap-4">
+        <h5 class="text-lg font-semibold">{{ title() }}</h5>
+        @if (!isEditing() && allowEditing()) {
+          <p-button
+            (onClick)="isEditing.set(true)"
+            styleClass="-mt-5 text-blue-400"
+            label="Edit"
+            severity="info"
+            variant="text"
+            size="small" />
+        }
+      </div>
+      <p class="text-gray-500 text-sm"><ng-content select="[kc-subtitle]"></ng-content></p>
+    </div>
+  </div>
+  @if (isEditing()) {
+    <div class="flex flex-col h-full justify-between w-full">
+      <div class="">
+        <ng-content select="[kc-edit-view]"></ng-content>
+      </div>
+      <div class="flex justify-end w-full gap-2 pt-4">
+        <p-button
+          label="Cancel"
+          severity="danger"
+          variant="outlined"
+          size="small"
+          (onClick)="cancelEditing()"
+        />
+        <p-button
+          label="Save"
+          severity="info"
+          size="small"
+          (onClick)="onSave.emit()"
+        />
+      </div>
+    </div>
+  } @else {
+   <ng-content select="[kc-data-view]"></ng-content>
+  }
+</div>
