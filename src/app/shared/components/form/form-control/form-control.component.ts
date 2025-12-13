@@ -14,7 +14,9 @@ import {Fluid} from 'primeng/fluid';
 })
 export class FormControlComponent {
   public readonly control = input<FormControl<unknown>>();
-  public readonly placeholder = input<string>();
+  public readonly placeholder = input<string>('');
+  public readonly isValid = input<boolean>(true);
+
   public readonly label = input.required<string>();
 
   protected readonly controlId = crypto.randomUUID();

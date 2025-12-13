@@ -3,11 +3,12 @@ import {environment} from '../../../environments/environment';
 import {LoggingService} from './logging.service';
 import {User} from '../models/users/user';
 import {UserService} from './user.service';
+import {Observable, Subject} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
-  private readonly _logger = inject(LoggingService);
   private readonly _userService = inject(UserService);
+  private readonly _subject = new Subject<User>();
 
   private _user!: User;
 
@@ -15,11 +16,20 @@ export class AuthenticationService {
     return !!this.token;
   }
 
-  public get currentUser(): User {
+  public getCurrentUser$(): Observable<User> {
+    return this._subject.asObservable();
+  }
+
+  public getCurrentUser(): User {
     if (!this._user)
       this.logout();
 
     return this._user;
+  }
+
+  public setCurrentUser(user: User) {
+    this._subject.next(user);
+    this._user = {...user};
   }
 
   public get token(): string {
@@ -45,7 +55,7 @@ export class AuthenticationService {
       return;
     }
 
-    this._user = await this._userService.getCurrentUser();
+    this.setCurrentUser(await this._userService.getCurrentUser());
   }
 
   /**

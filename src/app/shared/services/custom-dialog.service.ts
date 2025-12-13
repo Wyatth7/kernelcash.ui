@@ -56,7 +56,6 @@ export class CustomDialogService {
       if (this._device.isMobile){
 
         const instance = this._dialog.getInstance(dialogRef);
-        console.log(instance);
         instance?.maximize();
       }
     }

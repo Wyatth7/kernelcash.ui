@@ -33,7 +33,9 @@
           label="Save"
           severity="info"
           size="small"
-          (onClick)="onSave.emit()"
+          [icon]="isSaving() ? 'pi pi-spin pi-spinner' :''"
+          [disabled]="disabled()"
+          (onClick)="save()"
         />
       </div>
     </div>

@@ -1,21 +1,28 @@
-<kc-selected-setting title="My Account">
+<kc-selected-setting
+        title="My Account"
+        [action]="updateCurrentUserFn"
+        (onClose)="reset()"
+        [disabled]="currentUserForm().invalid">
     <ng-container kc-subtitle>Last logged in on {{ currentUser().lastLoginOn | date:'shortDate' }}</ng-container>
     <ng-container kc-data-view>
         <div class="flex gap-2">
             <div class="flex flex-col">
                 <p class="text-gray-300">{{ currentUser().nameFull }}</p>
                 <p class="text-gray-300">{{ currentUser().email }}</p>
-                <p class="text-gray-300">{{ currentUser().phone }}</p>
+                <p class="text-gray-300">{{ currentUser().phone | phone }}</p>
             </div>
         </div>
     </ng-container>
     <ng-container kc-edit-view>
-        <div class="flex flex-col gap-2 w-full">
+        <div class="flex flex-col gap-2 w-full" [formGroup]="currentUserForm()">
             <div class="flex flex-col md:flex-row gap-2 w-full">
                 <kc-form-control class="w-full" label="First name" [control]="currentUserForm().controls.nameFirst"/>
                 <kc-form-control class="w-full" label="Last name" [control]="currentUserForm().controls.nameLast"/>
             </div>
-            <kc-form-control label="Phone number" [control]="currentUserForm().controls.phone"/>
+            <kc-form-control label="Phone number" [isValid]="currentUserForm().controls.phone.valid">
+                <p-inputmask formControlName="phone" mask="(999) 999-9999" fluid/>
+                <ng-container kc-error>Please enter a valid phone number.</ng-container>
+            </kc-form-control>
         </div>
     </ng-container>
 </kc-selected-setting>

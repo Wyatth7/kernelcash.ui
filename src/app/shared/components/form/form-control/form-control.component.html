@@ -7,4 +7,14 @@
   } @else {
     <ng-content></ng-content>
   }
+    @if (control()?.valid || isValid()) {
+      <small class="text-gray-500">
+        <ng-content select="[kc-hint]"></ng-content>
+      </small>
+    }
+    @if (control()?.invalid || !isValid()) {
+      <small class="text-red-400">
+        <ng-content select="[kc-error]"></ng-content>
+      </small>
+    }
 </div>
