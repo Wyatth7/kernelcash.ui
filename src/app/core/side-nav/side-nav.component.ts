@@ -1,38 +1,50 @@
-import {Component, inject, output} from '@angular/core';
-import {Button, ButtonDirective, ButtonIcon} from 'primeng/button';
-import {RouterLink, RouterLinkActive} from '@angular/router';
-import {Menu} from 'primeng/menu';
+import {Component, inject, OnDestroy, OnInit, output, signal} from '@angular/core';
+import {Button} from 'primeng/button';
+import {RouterLink} from '@angular/router';
 import {MenuItem, MenuItemCommandEvent} from 'primeng/api';
 import {Avatar} from 'primeng/avatar';
 import {AuthenticationService} from '../../shared/services/authentication.service';
+import {CustomDialogService} from '../../shared/services/custom-dialog.service';
+import {UserSettingsComponent} from '../../shared/components/user-settings/user-settings.component';
+import {User} from '../../shared/models/users/user';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'kc-side-nav',
   imports: [
     Button,
     RouterLink,
-    Menu,
     Avatar,
   ],
   templateUrl: 'side-nav.component.html'
 })
-export class SideNavComponent {
+export class SideNavComponent implements OnInit, OnDestroy {
   private readonly _authentication = inject(AuthenticationService);
+  private readonly _dialog = inject(CustomDialogService);
 
-  protected get currentUserNameFull(): string {
-    return `${this._authentication.currentUser.nameFirst} ${this._authentication.currentUser.nameLast}`;
-  }
+  private _currentUserNameFullSubscription!: Subscription;
+
+  protected readonly currentUserNameFull = signal<string>(this._authentication.getCurrentUser().nameFull);
 
   public readonly closeNav = output<void>();
 
-  protected userMenuItems: MenuItem[] = [
-    {
-      label: 'Logout',
-      icon: 'pi pi-sign-out',
-      command: async (event: MenuItemCommandEvent) => {
-        this._authentication.logout();
-      }
-    }
-  ]
+  ngOnInit(): void {
+    this._currentUserNameFullSubscription = this._authentication.getCurrentUser$()
+      .subscribe(user => this.currentUserNameFull.set(user.nameFull));
+  }
+
+  ngOnDestroy(): void {
+    this._currentUserNameFullSubscription.unsubscribe();
+  }
+
+  protected openUserSettings(): void {
+    this._dialog.show(UserSettingsComponent, {
+      showAction: false,
+      showCancel: false,
+      title: 'Settings',
+      message: 'View or modify your account settings.',
+    });
+    this.closeNav.emit();
+  }
 
 }
