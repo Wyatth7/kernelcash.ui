@@ -22,10 +22,11 @@ export class UserSettingsComponent {
           label: 'My Account',
           component: UserEditorComponent
         },
-        {
-          label: 'Payments',
-          component: PaymentsComponent
-        }
+        // For payments editor in the future
+        // {
+        //   label: 'Payments',
+        //   component: PaymentsComponent
+        // }
       ]
     },
     {
