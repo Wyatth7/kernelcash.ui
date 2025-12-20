@@ -11,7 +11,7 @@ import {HttpHeaders} from '@angular/common/http';
 import {BudgetWriteService} from '../../../../services/budget/budget-write.service';
 import {
   createBudgetForm,
-  CreateBudgetForm,
+  CreateBudgetForm, createSpendingBucketForm,
   getFullBudgetValue
 } from '../../../../forms/budgets/create-budget/create-budget-form';
 import {SpendingBucketArrayInputComponent} from '../spending-bucket-array-input/spending-bucket-array-input.component';
@@ -22,10 +22,19 @@ import {Router} from '@angular/router';
 import {ImportTransactionsComponent} from '../../../transactions/import-transactions/import-transactions.component';
 import {DatePicker, DatePickerModule} from 'primeng/datepicker';
 import {FluidModule} from 'primeng/fluid';
+import {Tooltip} from 'primeng/tooltip';
 
 type IncomeExpenseComparison = {
   value: number;
   invalid: boolean;
+}
+
+enum FormStep {
+  Start = 1,
+  Income = 2,
+  Savings = 3,
+  Expenses = 4,
+  ImportTransactions = 5
 }
 
 @Component({
@@ -44,7 +53,8 @@ type IncomeExpenseComparison = {
     ImportTransactionsComponent,
     DatePickerModule,
     FormsModule,
-    FluidModule
+    FluidModule,
+    Tooltip
   ],
   templateUrl: 'budget-create-form.component.html'
 })
@@ -68,8 +78,9 @@ export class BudgetCreateFormComponent implements OnInit, OnDestroy {
     this.form().valueChanges.subscribe(changes => {
       const formValues = this.form().getRawValue();
       const incomeTotal = formValues.incomeSpendingBuckets.reduce((a, b) => a + b.total, 0);
+      const savingsTotal = formValues.savingSpendingBuckets.reduce((a, b) => a + b.total, 0);
       const expenseTotal = formValues.expenseSpendingBuckets.reduce((a, b) => a + b.total, 0);
-      const remaining = incomeTotal - expenseTotal;
+      const remaining = incomeTotal - (expenseTotal + savingsTotal);
 
       this.expenseComparison.set({
         value: remaining,
@@ -96,7 +107,7 @@ export class BudgetCreateFormComponent implements OnInit, OnDestroy {
 
       this.formSubmitting.set(false);
       this.createdBudgetId.set(budgetId);
-      callback(4);
+      callback(FormStep.ImportTransactions);
     } catch {
       this.formSubmitting.set(false)
     }
@@ -108,4 +119,19 @@ export class BudgetCreateFormComponent implements OnInit, OnDestroy {
 
     await this._router.navigate(['app', 'budgets', this.createdBudgetId()]);
   }
+
+  protected navigateToSavings(callback: (value: number) => unknown): void {
+    const control = this.form().controls.savingSpendingBuckets;
+    if (control.length <= 0)
+      control.push(createSpendingBucketForm(this._fb, {category: 'Savings'}));
+
+    callback(FormStep.Savings);
+  }
+
+  protected skipSavingsBucket(callback: (value: number) => unknown): void {
+    this.form().controls.savingSpendingBuckets.clear();
+    callback(FormStep.Expenses); // move to step 4
+  }
+
+  protected readonly FormStep = FormStep;
 }

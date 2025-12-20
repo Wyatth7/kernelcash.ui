@@ -1,7 +1,5 @@
-import {Component, computed, inject, input, OnChanges, output, signal} from '@angular/core';
+import {Component, input, OnChanges, output, signal} from '@angular/core';
 import {SelectedSpendingBucketView} from '../../../models/budgets/spending-buckets/selected-spending-bucket-view';
-import {ItemListItem} from '../../item-list/item-list.component';
-import {TransactionService} from '../../../services/transaction.service';
 import {UnallocatedTransaction} from '../../../models/transactions/unallocated-transaction';
 import {TotalTextComponent} from '../total-text/total-text.component';
 import {AllocatedTransactionsViewComponent} from './allocated-transactions-view/allocated-transactions-view.component';
@@ -9,10 +7,13 @@ import {
   BudgetDateRange,
   UnallocatedTransactionsViewComponent
 } from './unallocated-transactions-view/unallocated-transactions-view.component';
+import {SpendingBucketType} from '../../../models/budgets/spending-buckets/spending-bucket-type';
+import {SelectedIncomeBucketComponent} from './selected-income-bucket/selected-income-bucket.component';
 
 export enum SelectedView {
   Allocated,
-  Unallocated
+  Unallocated,
+  IncomeCreate
 }
 
 @Component({
@@ -20,7 +21,8 @@ export enum SelectedView {
   imports: [
     TotalTextComponent,
     AllocatedTransactionsViewComponent,
-    UnallocatedTransactionsViewComponent
+    UnallocatedTransactionsViewComponent,
+    SelectedIncomeBucketComponent
   ],
   templateUrl: 'selected-spending-bucket.component.html'
 })
@@ -51,6 +53,9 @@ export class SelectedSpendingBucketComponent implements OnChanges {
       return;
 
     this._previousSpendingBucketId = this.spendingBucketId();
+    if (this.selectedSpendingBucket()?.spendingBucketType === SpendingBucketType.Income
+      && this.selectedSpendingBucket()?.spendingBucketTransactions.length === 0)
+      this.selectedView.set(SelectedView.IncomeCreate);
   }
 
   protected spendingBucketLoaded(spendingBucket: SelectedSpendingBucketView): void {
@@ -70,7 +75,13 @@ export class SelectedSpendingBucketComponent implements OnChanges {
   protected calculateTotalRemaining(value: number): void {
     const totalRemaining = this.selectedSpendingBucket()?.remaining ?? 0;
 
-    this.remainingBudgetAmount.set(totalRemaining + value);
+    let remaining = totalRemaining - value;
+
+    // TODO: most likely need to add a check for negative income / savings, and change the user to be green with a +$100.00, ect.
+    // if (remaining < 0 && (this.selectedSpendingBucket()?.spendingBucketType === SpendingBucketType.Income || this.selectedSpendingBucket()?.spendingBucketType === SpendingBucketType.Savings))
+    //   remaining = Math.abs(remaining); // negative income / savings means excess in earnings or savings.
+
+    this.remainingBudgetAmount.set(remaining);
   }
 
   private onResetContent(): void {
@@ -81,4 +92,5 @@ export class SelectedSpendingBucketComponent implements OnChanges {
 
   protected readonly SelectedView = SelectedView;
   protected readonly Math = Math;
+  protected readonly SpendingBucketType = SpendingBucketType;
 }

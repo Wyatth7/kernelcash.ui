@@ -1,6 +1,6 @@
 <div [formGroup]="form()">
   <p-stepper [(value)]="activeStep" [linear]="true">
-    <p-step-item [value]="1">
+    <p-step-item [value]="FormStep.Start">
       <p-step>
         <ng-template #content let-activateCallback="activateCallback" let-value="value">
           <kc-icon-step (activated)="activateCallback()" icon="pi-calendar" [activeStep]="activeStep" [value]="value" />
@@ -33,13 +33,17 @@
               </div>
             </div>
 
-            <p-button [disabled]="form().controls.budgetName.invalid || form().controls.startDate.invalid || form().controls.endDate.invalid" styleClass="mt-8" label="Next" (onClick)="activateCallback(2)" />
+            <p-button
+              [disabled]="form().controls.budgetName.invalid || form().controls.startDate.invalid || form().controls.endDate.invalid"
+              styleClass="mt-8"
+              label="Next"
+              (onClick)="activateCallback(FormStep.Income)" />
           </div>
         </ng-template>
       </p-step-panel>
     </p-step-item>
 
-    <p-step-item [value]="2">
+    <p-step-item [value]="FormStep.Income">
       <p-step>
         <ng-template #content let-activateCallback="activateCallback" let-value="value">
           <kc-icon-step (activated)="activateCallback()" icon="pi-plus-circle" [activeStep]="activeStep" [value]="value" />
@@ -62,16 +66,63 @@
               [spendingBucketFormArray]="form().controls.incomeSpendingBuckets"
               namePlaceholder="Paycheck, Side Hustle, ect." />
           <div class="flex gap-2 mt-6">
-            <p-button label="Back" severity="secondary" (onClick)="activateCallback(1)" />
-            <p-button [disabled]="form().controls.incomeSpendingBuckets.invalid" label="Next" (onClick)="activateCallback(3)"/>
+            <p-button label="Back" severity="secondary" (onClick)="activateCallback(FormStep.Start)" />
+            <p-button [disabled]="form().controls.incomeSpendingBuckets.invalid" label="Next" (onClick)="activateCallback(FormStep.Savings)"/>
           </div>
           </div>
         </ng-template>
       </p-step-panel>
     </p-step-item>
 
+    <p-step-item [value]="FormStep.Savings">
+      <p-step>
+        <ng-template #content let-activateCallback="activateCallback" let-value="value">
+          <kc-icon-step (activated)="activateCallback()" icon="pi-bookmark-fill" [activeStep]="activeStep" [value]="value" />
+        </ng-template>
+      </p-step>
+      <p-step-panel>
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="py-6">
 
-    <p-step-item [value]="3">
+            <div class="flex flex-col gap-2 mb-10">
+              <h3 class="text-2xl">Save for later</h3>
+              <p class="m-0 p-0 text-gray-400">
+                Save the money you make for trips, gifts, large purchases, or emergencies.
+                It is recommended to save 30% of your income per-year, and have at least 3-6 months
+                of income saved for emergencies.
+              </p>
+            </div>
+            <kc-spending-bucket-array-input
+              defaultCategory="Savings"
+              [requireCategory]="false"
+              [spendingBucketFormArray]="form().controls.savingSpendingBuckets"
+              namePlaceholder="Emergency Fund, Vacation Fund, ect." />
+            <p
+              class="-mt-7 p-0 mb-6"
+              [ngClass]="{
+                  'text-emerald-300': !expenseComparison().invalid,
+                  'text-red-400': expenseComparison().invalid
+               }"
+            >Remaining: {{expenseComparison().value | currency}}</p>
+            <div class="flex gap-2 mt-6">
+              <p-button label="Back" severity="secondary" (onClick)="activateCallback(FormStep.Income)" />
+
+              @if (form().controls.savingSpendingBuckets.length == 1 && form().controls.savingSpendingBuckets.invalid) {
+                <p-button
+                  label="Skip"
+                  severity="danger"
+                  (onClick)="skipSavingsBucket(activateCallback)"
+                  pTooltip="We recommend saving 30% of your income for emergencies." />
+              } @else {
+                <p-button [disabled]="form().controls.incomeSpendingBuckets.invalid" label="Next" (onClick)="activateCallback(FormStep.Expenses)"/>
+              }
+            </div>
+          </div>
+        </ng-template>
+      </p-step-panel>
+    </p-step-item>
+
+    <p-step-item [value]="FormStep.Expenses">
       <p-step>
         <ng-template #content let-activateCallback="activateCallback" let-value="value">
           <kc-icon-step (activated)="activateCallback()" icon="pi-minus-circle" [activeStep]="activeStep" [value]="value" />
@@ -97,7 +148,7 @@
                }"
             >Remaining: {{expenseComparison().value | currency}}</p>
             <div class="flex gap-2 flex-row">
-              <p-button label="Back" severity="secondary" (onClick)="activateCallback(2)" [disabled]="formSubmitting()" />
+              <p-button label="Back" severity="secondary" (onClick)="navigateToSavings(activateCallback)" [disabled]="formSubmitting()" />
               <p-button
                 [disabled]="form().controls.expenseSpendingBuckets.invalid || form().invalid || formSubmitting()"
                 label="Finish"
@@ -109,7 +160,7 @@
         </ng-template>
       </p-step-panel>
     </p-step-item>
-    <p-step-item [value]="4">
+    <p-step-item [value]="FormStep.ImportTransactions">
       <p-step>
         <ng-template #content let-activateCallback="activateCallback" let-value="value">
           <kc-icon-step (activated)="activateCallback()" icon="pi-file-import" [activeStep]="activeStep" [value]="value" />

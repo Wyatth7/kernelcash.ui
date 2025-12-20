@@ -1,0 +1,19 @@
+<div class="flex flex-col gap-4">
+  <div class="flex flex-end">
+    @if (!didNotMakeTotal()) {
+      <p-button label="I" icon="pi pi-pencil" size="small" />
+      <p-button label="I've been Paid" icon="pi pi-check" size="small" />
+    } @else {
+
+      <p-button
+        label="Save"
+        icon="pi pi-check"
+        variant="outlined"
+        severity="success"
+        size="small"
+      />
+    }
+  </div>
+
+
+</div>
