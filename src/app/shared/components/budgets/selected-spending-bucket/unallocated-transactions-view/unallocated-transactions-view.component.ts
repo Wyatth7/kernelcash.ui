@@ -1,9 +1,6 @@
 import {Component, computed, inject, input, OnChanges, OnInit, output, signal, SimpleChanges} from '@angular/core';
 import {ListWithActionsComponent} from '../list-with-actions/list-with-actions.component';
 import {
-  TransactionActionsComponent
-} from '../transaction-actions/transaction-actions.component';
-import {
   CreateSpendingBucketTransaction
 } from '../../../../models/budgets/spending-buckets/create-spending-bucket-transaction';
 import {SpendingBucketService} from '../../../../services/budget/spending-bucket.service';
@@ -15,6 +12,8 @@ import {
   SpendingTransactionChanged,
   UnallocatedTransactionActionComponent
 } from './unallocated-actions/unallocated-transaction-action.component';
+import {TransactionType} from '../../../../models/enum/transaction-type';
+import {SpendingBucketType} from '../../../../models/budgets/spending-buckets/spending-bucket-type';
 
 export type BudgetDateRange = {
   startDate: Date;
@@ -37,6 +36,8 @@ export class UnallocatedTransactionsViewComponent implements OnInit, OnChanges {
 
   public readonly spendingBucketId = input.required<number>();
   public readonly budgetDateRange = input.required<BudgetDateRange>();
+  public readonly spendingBucketType = input.required<SpendingBucketType>();
+
   public readonly loading = output<boolean>();
   public readonly onCancelClicked = output<void>();
   public readonly remainingValue = output<number>();
@@ -61,7 +62,7 @@ export class UnallocatedTransactionsViewComponent implements OnInit, OnChanges {
   }
 
   private async loadUnallocatedTransactions(): Promise<void> {
-    const unallocatedTransactions = await this._transaction.getUnallocatedTransactions(this.budgetDateRange().startDate, this.budgetDateRange().endDate);
+    const unallocatedTransactions = await this._transaction.getUnallocatedTransactions(this.budgetDateRange().startDate, this.budgetDateRange().endDate, this.getTransactionTypeForBucket() );
     this.unallocatedTransactions.set(unallocatedTransactions);
     this._previousSpendingBucketId = this.spendingBucketId();
   }
@@ -110,5 +111,15 @@ export class UnallocatedTransactionsViewComponent implements OnInit, OnChanges {
   protected cancel(): void {
     this._spendingBucketTransactionsMap.clear();
     this.onCancelClicked.emit();
+  }
+
+  private getTransactionTypeForBucket(): TransactionType {
+    switch (this.spendingBucketType()) {
+      case SpendingBucketType.Income:
+      case SpendingBucketType.Savings:
+        return TransactionType.Credit;
+      case SpendingBucketType.Expense:
+        return TransactionType.Debit;
+    }
   }
 }

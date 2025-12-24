@@ -13,7 +13,7 @@ import {SelectedIncomeBucketComponent} from './selected-income-bucket/selected-i
 export enum SelectedView {
   Allocated,
   Unallocated,
-  IncomeCreate
+  Income
 }
 
 @Component({
@@ -53,14 +53,15 @@ export class SelectedSpendingBucketComponent implements OnChanges {
       return;
 
     this._previousSpendingBucketId = this.spendingBucketId();
-    if (this.selectedSpendingBucket()?.spendingBucketType === SpendingBucketType.Income
-      && this.selectedSpendingBucket()?.spendingBucketTransactions.length === 0)
-      this.selectedView.set(SelectedView.IncomeCreate);
   }
 
   protected spendingBucketLoaded(spendingBucket: SelectedSpendingBucketView): void {
     this.selectedSpendingBucket.set(spendingBucket);
     this.remainingBudgetAmount.set(spendingBucket.remaining ?? 0);
+
+    if (this.selectedSpendingBucket()?.spendingBucketType === SpendingBucketType.Income
+      && this.selectedSpendingBucket()?.spendingBucketTransactions.length === 0)
+      this.selectedView.set(SelectedView.Income);
   }
 
   protected async actionRun(remaining: number): Promise<void> {

@@ -29,14 +29,15 @@
             <kc-unallocated-transactions-view
               [spendingBucketId]="spendingBucketId()"
               [budgetDateRange]="budgetDateRange()"
+              [spendingBucketType]="selectedSpendingBucket()?.spendingBucketType ?? SpendingBucketType.Expense"
               (loading)="loading.set($event)"
               (onCancelClicked)="selectedView.set(SelectedView.Allocated)"
               (remainingValue)="calculateTotalRemaining($event)"
               (itemsAdded)="actionRun($event)"
             />
           }
-          @case (SelectedView.IncomeCreate) {
-            <kc-selected-income-bucket />
+          @case (SelectedView.Income) {
+            <kc-selected-income-bucket [selectedSpendingBucket]="selectedSpendingBucket()" />
           }
         }
     </div>

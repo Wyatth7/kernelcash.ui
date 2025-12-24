@@ -9,6 +9,7 @@ import {UnallocatedTransaction} from '../models/transactions/unallocated-transac
 import {TransactionSearch} from '../forms/transactions/transaction-search-form';
 import {Page} from '../models/pagination/page';
 import {DateUtils} from '../utils/date';
+import {TransactionType} from '../models/enum/transaction-type';
 
 @Injectable({providedIn: 'root'})
 export class TransactionService {
@@ -38,8 +39,8 @@ export class TransactionService {
     return response.data;
   }
 
-  public async getUnallocatedTransactions(startDate: Date, endDate: Date): Promise<UnallocatedTransaction[]> {
-    const params = RequestUtils.getQueryParamsFromObject({startDate, endDate})
+  public async getUnallocatedTransactions(startDate: Date, endDate: Date, transactionType: TransactionType): Promise<UnallocatedTransaction[]> {
+    const params = RequestUtils.getQueryParamsFromObject({startDate, endDate, transactionType})
 
     const response = await lastValueFrom<OkApiResponseWithData<UnallocatedTransaction[]>>(
       this._http.get<OkApiResponseWithData<UnallocatedTransaction[]>>(`${this._basePath}/unallocated`, {params})

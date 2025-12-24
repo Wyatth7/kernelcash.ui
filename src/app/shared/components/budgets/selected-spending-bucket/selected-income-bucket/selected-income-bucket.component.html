@@ -1,8 +1,25 @@
 <div class="flex flex-col gap-4">
-  <div class="flex flex-end">
+  <div class="flex flex-col gap-3">
     @if (!didNotMakeTotal()) {
-      <p-button label="I" icon="pi pi-pencil" size="small" />
-      <p-button label="I've been Paid" icon="pi pi-check" size="small" />
+      <div class="flex flex-col gap-3">
+        <p class="text-gray-400">Have you received income for {{selectedSpendingBucket()?.name ?? 'this item'}}?</p>
+        <div class="flex gap-3">
+          <p-button  label="I will not be paid"  severity="secondary"  size="small" />
+          <p-button label="I have been paid" severity="success"  size="small" />
+        </div>
+      </div>
+      <div class="flex flex-col gap-3">
+        <p class="text-gray-400">Were you paid the planned amount?</p>
+        <div class="flex gap-3">
+          <p-button  label="No"  severity="secondary"  size="small" />
+          <p-button label="Yes" severity="success"  size="small" />
+        </div>
+      </div>
+      <div class="flex flex-col gap-3">
+        <p class="text-gray-400">Enter the amount you were paid.</p>
+        <kc-form-control label="Amount" [control]="amountControl" />
+        <p-button label="Save" icon="pi pi-check"  severity="success" size="small" />
+      </div>
     } @else {
 
       <p-button
