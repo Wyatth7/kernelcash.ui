@@ -1,34 +1,55 @@
 <kc-transaction-actions [itemAdded]="itemAdded()">
 
   <ng-container item-added>
-    @if (itemSplit()) {
-      <div class="flex flex-col gap-1">
-        <label class="text-sm">Amount</label>
-        <p-inputnumber
-          size="small"
-          [formControl]="splitAmountControl"
-          inputId="locale-user"
-          mode="currency"
-          currency="USD"
-          placeholder="Income amount"
-        ></p-inputnumber>
-      </div>
-    }
-
-    <div class="flex items-end">
-
+    @if (itemIgnored()) {
       <p-button
         styleClass="!text-xs"
-        label="Remove"
-        icon="pi pi-times"
+        label="Show"
+        icon="pi pi-eye"
+        (onClick)="unIgnoreItem()"
         size="small"
         variant="outlined"
         severity="danger"
-        (click)="removeItem()" />
-    </div>
+      />
+    } @else {
+      @if (itemSplit()) {
+        <div class="flex flex-col gap-1">
+          <label class="text-sm">Amount</label>
+          <p-inputnumber
+            size="small"
+            [formControl]="splitAmountControl"
+            inputId="locale-user"
+            mode="currency"
+            currency="USD"
+            placeholder="Income amount"
+          ></p-inputnumber>
+        </div>
+      }
+
+      <div class="flex items-end">
+
+        <p-button
+          styleClass="!text-xs"
+          label="Remove"
+          icon="pi pi-times"
+          size="small"
+          variant="outlined"
+          severity="danger"
+          (click)="removeItem()" />
+      </div>
+    }
+
   </ng-container>
 
   <ng-container>
+      <p-button
+        styleClass="!text-xs"
+        label="Hide"
+        icon="pi pi-eye-slash"
+        size="small"
+        severity="secondary"
+        (click)="ignoreItem()"
+      />
       <p-button
         styleClass="!text-xs"
         label="Split"

@@ -1,3 +1,5 @@
+import {TransactionType} from '../enum/transaction-type';
+
 export interface Transaction {
   transactionId: number;
   categoryId: number;
@@ -10,4 +12,5 @@ export interface Transaction {
   lastUpdatedOn: Date;
   postedOn: Date;
   dateOfTransaction: Date;
+  transactionType: TransactionType;
 }

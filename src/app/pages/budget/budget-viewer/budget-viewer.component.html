@@ -5,7 +5,11 @@
     <ng-template #valueTemplate let-item>
       <div class="flex gap-2">
         <kc-total-text [total]="item.total" text="Total" severity="info" size="md"/>
-        <kc-total-text [total]="item.value" text="Remaining" size="md" />
+        @if (item.spendingBucketType === SpendingBucketType.Savings && item.value < 0) {
+          <kc-total-text [total]="item.displayValue" text="Surplus" size="md" />
+        } @else {
+          <kc-total-text [total]="item.displayValue" text="Remaining" size="md" />
+        }
       </div>
     </ng-template>
   </kc-data-card-with-item-list>

@@ -1,3 +1,5 @@
+import {TransactionType} from '../../enum/transaction-type';
+
 export interface SpendingBucketTransactions {
   spendingBucketTransactionId: number;
   transactionId: number;
@@ -5,4 +7,5 @@ export interface SpendingBucketTransactions {
   transactionName: string;
   accountName: string;
   accountNumber: number;
+  transactionType: TransactionType;
 }

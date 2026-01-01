@@ -9,34 +9,41 @@
           <kc-total-text [total]="selectedSpendingBucket()?.total || 0" text="Planned" severity="info" />
         </div>
         <div>
-          <kc-total-text [total]="remainingBudgetAmount() || 0" text="Remaining" [severity]="remainingBudgetAmount() > 0 ? 'success' : 'danger'" />
+          @if (selectedSpendingBucket()?.spendingBucketType === SpendingBucketType.Savings && selectedSpendingBucket()!.remaining < 0) {
+            <kc-total-text [total]="remainingBudgetAmount()" text="Surplus" severity="success" />
+          } @else {
+            <kc-total-text [total]="remainingBudgetAmount() || 0" text="Remaining" [severity]="remainingBudgetAmount() > 0 ? 'success' : 'danger'" />
+          }
       </div>
       </div>
     </div>
     <div class="overflow-y-auto">
-
-    @switch (selectedView()) {
-      @case(SelectedView.Allocated) {
-        <kc-allocated-transactions-view
-          (onAddTransactionsClicked)="selectedView.set(SelectedView.Unallocated)"
-          [spendingBucketId]="spendingBucketId()"
-          (loading)="loading.set($event)"
-          (spendingBucketLoaded)="spendingBucketLoaded($event)"
-          (remainingValue)="calculateTotalRemaining($event)"
-          (itemsDeallocated)="actionRun(Math.abs($event))"
-        />
-      }
-      @case(SelectedView.Unallocated) {
-        <kc-unallocated-transactions-view
-          [spendingBucketId]="spendingBucketId()"
-          [budgetDateRange]="budgetDateRange()"
-          (loading)="loading.set($event)"
-          (onCancelClicked)="selectedView.set(SelectedView.Allocated)"
-          (remainingValue)="calculateTotalRemaining($event)"
-          (itemsAdded)="actionRun($event)"
-        />
-      }
-    }
+        @switch (selectedView()) {
+          @case(SelectedView.Allocated) {
+            <kc-allocated-transactions-view
+              (onAddTransactionsClicked)="selectedView.set(SelectedView.Unallocated)"
+              [spendingBucketId]="spendingBucketId()"
+              (loading)="loading.set($event)"
+              (spendingBucketLoaded)="spendingBucketLoaded($event)"
+              (remainingValue)="calculateTotalRemaining($event)"
+              (itemsDeallocated)="actionRun(Math.abs($event))"
+            />
+          }
+          @case(SelectedView.Unallocated) {
+            <kc-unallocated-transactions-view
+              [spendingBucketId]="spendingBucketId()"
+              [budgetDateRange]="budgetDateRange()"
+              [spendingBucketType]="selectedSpendingBucket()?.spendingBucketType ?? SpendingBucketType.Expense"
+              (loading)="loading.set($event)"
+              (onCancelClicked)="selectedView.set(SelectedView.Allocated)"
+              (remainingValue)="calculateTotalRemaining($event)"
+              (itemsAdded)="actionRun($event)"
+            />
+          }
+          @case (SelectedView.Income) {
+            <kc-selected-income-bucket [selectedSpendingBucket]="selectedSpendingBucket()" />
+          }
+        }
     </div>
   </div>
 

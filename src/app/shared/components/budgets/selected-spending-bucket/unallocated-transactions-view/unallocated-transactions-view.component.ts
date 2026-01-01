@@ -1,9 +1,6 @@
 import {Component, computed, inject, input, OnChanges, OnInit, output, signal, SimpleChanges} from '@angular/core';
 import {ListWithActionsComponent} from '../list-with-actions/list-with-actions.component';
 import {
-  TransactionActionsComponent
-} from '../transaction-actions/transaction-actions.component';
-import {
   CreateSpendingBucketTransaction
 } from '../../../../models/budgets/spending-buckets/create-spending-bucket-transaction';
 import {SpendingBucketService} from '../../../../services/budget/spending-bucket.service';
@@ -15,6 +12,8 @@ import {
   SpendingTransactionChanged,
   UnallocatedTransactionActionComponent
 } from './unallocated-actions/unallocated-transaction-action.component';
+import {SpendingBucketType} from '../../../../models/budgets/spending-buckets/spending-bucket-type';
+import {TransactionType} from '../../../../models/enum/transaction-type';
 
 export type BudgetDateRange = {
   startDate: Date;
@@ -37,6 +36,8 @@ export class UnallocatedTransactionsViewComponent implements OnInit, OnChanges {
 
   public readonly spendingBucketId = input.required<number>();
   public readonly budgetDateRange = input.required<BudgetDateRange>();
+  public readonly spendingBucketType = input.required<SpendingBucketType>();
+
   public readonly loading = output<boolean>();
   public readonly onCancelClicked = output<void>();
   public readonly remainingValue = output<number>();
@@ -45,6 +46,7 @@ export class UnallocatedTransactionsViewComponent implements OnInit, OnChanges {
   private _previousSpendingBucketId!: number;
 
   private readonly _spendingBucketTransactionsMap = new Map<number, number>();
+  private _ignoredTransactions: number[] = [];
 
   protected readonly unallocatedTransactions = signal<UnallocatedTransaction[]>([]);
 
@@ -61,7 +63,7 @@ export class UnallocatedTransactionsViewComponent implements OnInit, OnChanges {
   }
 
   private async loadUnallocatedTransactions(): Promise<void> {
-    const unallocatedTransactions = await this._transaction.getUnallocatedTransactions(this.budgetDateRange().startDate, this.budgetDateRange().endDate);
+    const unallocatedTransactions = await this._transaction.getUnallocatedTransactions(this.budgetDateRange().startDate, this.budgetDateRange().endDate, this.getTransactionTypeForBucket() );
     this.unallocatedTransactions.set(unallocatedTransactions);
     this._previousSpendingBucketId = this.spendingBucketId();
   }
@@ -88,7 +90,7 @@ export class UnallocatedTransactionsViewComponent implements OnInit, OnChanges {
     for (const [transactionId, amount] of this._spendingBucketTransactionsMap.entries())
       newTransactions.push({transactionId, amount});
 
-    const remaining = await this._spendingBucket.createSpendingBucketTransactions(this.spendingBucketId(), newTransactions);
+    const remaining = await this._spendingBucket.createSpendingBucketTransactions(this.spendingBucketId(), newTransactions, this._ignoredTransactions);
     if (!remaining)
       return;
 
@@ -99,16 +101,42 @@ export class UnallocatedTransactionsViewComponent implements OnInit, OnChanges {
     if (this.unallocatedTransactions().length === 0)
       return [];
 
-    return this.unallocatedTransactions().map(t => ({
-      id: t.transactionId,
-      title: t.name,
-      subTitle: this._transaction.getTransactionSubTitle(t.accountName, t.accountNumber),
-      value: t.amount - t.splitTransactionWithBudgets.reduce((a, b) => a + b.amount, 0),
-    }))
+    return this.unallocatedTransactions().map(t => {
+      const remainingValue = t.amount - t.splitTransactionWithBudgets.reduce((a, b) => a + b.amount, 0);
+
+      return {
+        id: t.transactionId,
+        title: t.name,
+        subTitle: this._transaction.getTransactionSubTitle(t.accountName, t.accountNumber),
+        value: remainingValue,
+        displayValue: this._transaction.signTransaction(remainingValue, t.transactionType)
+      };
+    })
   });
 
   protected cancel(): void {
     this._spendingBucketTransactionsMap.clear();
     this.onCancelClicked.emit();
+  }
+
+  protected ignoreTransaction(transactionId: number): void {
+    if (this._ignoredTransactions.includes(transactionId))
+      return;
+
+    this._ignoredTransactions.push(transactionId);
+  }
+
+  protected unIgnoreTransaction(transactionId: number): void {
+    this._ignoredTransactions = this._ignoredTransactions.filter(id => id !== transactionId);
+  }
+
+  private getTransactionTypeForBucket(): TransactionType {
+    switch (this.spendingBucketType()) {
+      case SpendingBucketType.Income:
+      case SpendingBucketType.Savings:
+        return TransactionType.Credit;
+      case SpendingBucketType.Expense:
+        return TransactionType.Debit;
+    }
   }
 }

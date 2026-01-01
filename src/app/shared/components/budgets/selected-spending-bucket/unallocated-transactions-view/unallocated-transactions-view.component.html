@@ -23,6 +23,8 @@
         [shouldClear]="false"
         (spendingTransactionAdded)="spendingBucketTransactionAdded($event)"
         (spendingTransactionRemoved)="spendingBucketTransactionRemoved($event)"
+        (transactionIgnored)="ignoreTransaction($event)"
+        (unIgnoreTransaction)="unIgnoreTransaction($event)"
         [item]="item"/>
     </ng-template>
   </kc-item-list>

@@ -38,7 +38,8 @@ export class TransactionCardComponent implements OnInit {
     this.items.set(transactions.map(t => ({
         title: t.name,
         subTitle: this._transactionService.getTransactionSubTitle(t.accountName, t.accountNumber),
-        value: t.amount
+        value: t.amount,
+        displayValue: this._transactionService.signTransaction(t.amount, t.transactionType)
       })
     ));
 
@@ -46,7 +47,7 @@ export class TransactionCardComponent implements OnInit {
   }
 
   protected async navigateToTransactions(): Promise<void> {
-    this._router.navigate(['app', 'transactions'])
+    await this._router.navigate(['app', 'transactions'])
   }
 
   private get queryValues(): Partial<TransactionSearch> {

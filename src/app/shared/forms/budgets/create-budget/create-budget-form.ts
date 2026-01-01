@@ -22,6 +22,7 @@ export function createBudgetForm(formBuilder: FormBuilder): FormGroup<CreateBudg
     startDate: new FormControl<Date>(new Date(), {validators: [Validators.required], nonNullable: true}),
     endDate: new FormControl<Date>(nextMonth, {validators: [Validators.required], nonNullable: true}),
     incomeSpendingBuckets: new FormArray([createSpendingBucketForm(formBuilder)], Validators.min(1)),
+    savingSpendingBuckets: new FormArray([createSpendingBucketForm(formBuilder)], Validators.min(0)),
     expenseSpendingBuckets: new FormArray([createSpendingBucketForm(formBuilder)], Validators.min(1))
   }, {
     validators: [incomeExpenseValidator(), dateRangeValidator()]
@@ -43,6 +44,7 @@ export function getFullBudgetValue(form: FormGroup<CreateBudgetForm>): CreateBud
     amount: values.incomeSpendingBuckets.map(i => i.total).reduce((a, b) => a + b, 0),
     spendingBuckets: [
       ...values.incomeSpendingBuckets.map(i => ({total: i.total, name: i.name, spendingBucketType: SpendingBucketType.Income, category: 'Income'})),
+      ...values.savingSpendingBuckets.map(i => ({total: i.total, name: i.name, spendingBucketType: SpendingBucketType.Savings, category: 'Savings'})),
       ...values.expenseSpendingBuckets.map(e => ({name: e.name, total: e.total, spendingBucketType: SpendingBucketType.Expense, category: e.category}))
     ],
     startDate: values.startDate,
@@ -54,9 +56,10 @@ function incomeExpenseValidator(): ValidatorFn {
   return (formGroup: AbstractControl): ValidationErrors | null => {
     const formValues = (formGroup as unknown as FormGroup<CreateBudgetForm>).getRawValue();
     const incomeTotal = formValues.incomeSpendingBuckets.reduce((a, b) => a + b.total, 0);
+    const savingsTotal = formValues.savingSpendingBuckets.reduce((a, b) => a + b.total, 0);
     const expenseTotal = formValues.expenseSpendingBuckets.reduce((a, b) => a + b.total, 0);
 
-    return (incomeTotal - expenseTotal) < 0 ? {expenseGreaterThanIncome: true} : null;
+    return (incomeTotal - (expenseTotal + savingsTotal)) < 0 ? {expenseGreaterThanIncome: true} : null;
   }
 }
 
@@ -73,6 +76,7 @@ export interface CreateBudgetForm {
   startDate: FormControl<Date>;
   endDate: FormControl<Date>;
   incomeSpendingBuckets: FormArray<FormGroup<SpendingBucketForm>>;
+  savingSpendingBuckets: FormArray<FormGroup<SpendingBucketForm>>;
   expenseSpendingBuckets: FormArray<FormGroup<SpendingBucketForm>>;
 }
 
