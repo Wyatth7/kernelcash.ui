@@ -33,7 +33,7 @@ export class BudgetCardComponent implements OnInit {
 
   protected async loadData(): Promise<void> {
     this.loading.set(true)
-    const data = await this._budget.getBudgetsForGroup(this.auth.getCurrentUser().budgetGroupId, this.page());
+    const data = await this._budget.getBudgetsForGroup(this.auth.getCurrentUser().budgetGroupIds, this.page());
 
     this.budgetListItems.set(
       data.map(b => ({
