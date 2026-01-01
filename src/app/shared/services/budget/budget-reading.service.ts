@@ -17,11 +17,11 @@ export class BudgetReadingService {
 
   }
 
-  public async getBudgetsForGroup(budgetGroupId: number, page: Page): Promise<BudgetQueryListItem[]> {
-    const params = RequestUtils.getQueryParamsFromObject(page);
+  public async getBudgetsForGroup(budgetGroupIds: number[], page: Page): Promise<BudgetQueryListItem[]> {
+    const params = RequestUtils.getQueryParamsFromObject({...page, budgetGroupIds: budgetGroupIds.join(',')});
 
     const response = await lastValueFrom<OkApiResponseWithData<BudgetQueryListItem[]>>(
-      this._http.get<OkApiResponseWithData<BudgetQueryListItem[]>>(`${this._basePath}/group/${budgetGroupId}/budgets`, {params})
+      this._http.get<OkApiResponseWithData<BudgetQueryListItem[]>>(`${this._basePath}/group/budgets`, {params})
     )
 
     return response.data;
