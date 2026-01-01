@@ -30,9 +30,12 @@ export class UnallocatedTransactionActionComponent implements OnInit, OnDestroy,
   public readonly spendingTransactionAdded = output<SpendingTransactionChanged>();
   public readonly spendingTransactionRemoved = output<number>();
   public readonly isValid = output<boolean>();
+  public readonly transactionIgnored = output<number>();
+  public readonly unIgnoreTransaction = output<number>();
 
   protected readonly itemAdded = signal<boolean>(false);
   protected readonly itemSplit = signal<boolean>(false);
+  protected readonly itemIgnored = signal<boolean>(false);
 
   protected splitAmountControl!: FormControl<number | null>;
   protected splitAmountControlChangesSubscription!: Subscription;
@@ -98,6 +101,25 @@ export class UnallocatedTransactionActionComponent implements OnInit, OnDestroy,
 
     this.clearState();
     this.spendingTransactionRemoved.emit(+id);
+  }
+
+  protected ignoreItem(): void {
+    const id = this.item().id;
+    if (!id) return;
+
+    this.itemIgnored.set(true);
+    this.transactionIgnored.emit(+id);
+    this.removeItem();
+    this.itemAdded.set(true);
+  }
+
+  protected unIgnoreItem(): void {
+    const id = this.item().id;
+    if (!id) return;
+
+    this.unIgnoreTransaction.emit(+id);
+    this.itemAdded.set(false);
+    this.itemIgnored.set(false);
   }
 
   private clearState(): void {

@@ -7,6 +7,7 @@ import {RouterLink} from '@angular/router';
 export type ItemListItem = {
   title: string;
   value: string | number;
+  displayValue?: string | number;
   id?: string | number;
   subTitle?: string;
   linkUrl?: string;

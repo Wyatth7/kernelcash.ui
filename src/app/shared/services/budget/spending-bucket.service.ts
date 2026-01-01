@@ -39,11 +39,14 @@ export class SpendingBucketService {
     return response.data;
   }
 
-  public async createSpendingBucketTransactions(spendingBucketId: number, transactions: CreateSpendingBucketTransaction[]): Promise<number | undefined> {
+  public async createSpendingBucketTransactions(spendingBucketId: number, transactions: CreateSpendingBucketTransaction[], ignoredTransactionIds: number[]): Promise<number | undefined> {
     try {
       const result = await lastValueFrom<OkApiResponseWithData<{ remaining: number }>>
       (
-        this._http.post<OkApiResponseWithData<Remainging>>(`${this._baseUrl}/${spendingBucketId}`, [...transactions])
+        this._http.post<OkApiResponseWithData<Remainging>>(`${this._baseUrl}/${spendingBucketId}`, {
+          spendingBucketTransactions: [...transactions],
+          ignoreTransactionIds: [...ignoredTransactionIds]
+        })
       );
       return result.data.remaining;
     } catch (e) {

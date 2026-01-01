@@ -57,7 +57,9 @@ export class SelectedSpendingBucketComponent implements OnChanges {
 
   protected spendingBucketLoaded(spendingBucket: SelectedSpendingBucketView): void {
     this.selectedSpendingBucket.set(spendingBucket);
-    this.remainingBudgetAmount.set(spendingBucket.remaining ?? 0);
+    const remainingAmount = spendingBucket.spendingBucketType === SpendingBucketType.Savings && spendingBucket.remaining < 0 ? Math.abs(spendingBucket.remaining) : spendingBucket.remaining;
+
+    this.remainingBudgetAmount.set(remainingAmount);
 
     if (this.selectedSpendingBucket()?.spendingBucketType === SpendingBucketType.Income
       && this.selectedSpendingBucket()?.spendingBucketTransactions.length === 0)

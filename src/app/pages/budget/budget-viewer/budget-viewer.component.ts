@@ -5,7 +5,8 @@ import {ActivatedRoute} from '@angular/router';
 import {BudgetView} from '../../../shared/models/budgets/budget-view';
 import {SpinnerComponent} from '../../../shared/components/spinner/spinner.component';
 import {
-  DataCardWithItemsListComponent, ItemList
+  DataCardWithItemsListComponent,
+  ItemList
 } from '../../../shared/components/data-card-with-items-list/data-card-with-items-list.component';
 import {ItemListItem} from '../../../shared/components/item-list/item-list.component';
 import {DrawerComponent} from '../../../shared/components/drawer/drawer.component';
@@ -84,9 +85,11 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
             {
               title: bucket.name,
               value: bucket.remaining,
+              displayValue: bucket.spendingBucketType === SpendingBucketType.Savings && bucket.remaining < 0 ? `+${bucket.remaining}` : bucket.remaining,
               id: bucket.spendingBucketId,
               onClick: this.spendingBucketSelected.bind(this),
-              total: bucket.total
+              total: bucket.total,
+              spendingBucketType: bucket.spendingBucketType
             }
           ]
         })
@@ -98,8 +101,10 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
         title: bucket.name,
         value: bucket.remaining,
         id: bucket.spendingBucketId,
+        displayValue: bucket.spendingBucketType === SpendingBucketType.Savings && bucket.remaining < 0 ? Math.abs(bucket.remaining) : bucket.remaining,
         onClick: this.spendingBucketSelected.bind(this),
-        total: bucket.total
+        total: bucket.total,
+        spendingBucketType: bucket.spendingBucketType
       });
 
       return itemList;
@@ -110,4 +115,6 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
     this.selectedSpendingBucket.set(item);
     this.showSelectedSpendingBucket.set(true)
   }
+
+  protected readonly SpendingBucketType = SpendingBucketType;
 }

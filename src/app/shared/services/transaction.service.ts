@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {lastValueFrom} from 'rxjs';
 import {OkApiResponseWithData} from '../models/api-response/ok-api-response-with-data';
@@ -54,5 +54,12 @@ export class TransactionService {
       return accountName;
 
     return `Account ending in ${accountNumber}`;
+  }
+
+  public signTransaction(value: number, type: TransactionType): number {
+    if (value === 0)
+      return 0;
+
+    return type === TransactionType.Debit ? -1 * value : value;
   }
 }

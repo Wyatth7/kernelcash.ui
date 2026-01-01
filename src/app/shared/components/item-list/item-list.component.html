@@ -57,7 +57,7 @@
                 @if (itemValueTemplate) {
                   <ng-container *ngTemplateOutlet="itemValueTemplate; context: {$implicit: item}"></ng-container>
                 } @else {
-                  <span class="text-nowrap">{{item.value | currency}}</span>
+                  <span class="text-nowrap">{{item.displayValue ?? item.value | currency}}</span>
                 }
               </div>
             </div>

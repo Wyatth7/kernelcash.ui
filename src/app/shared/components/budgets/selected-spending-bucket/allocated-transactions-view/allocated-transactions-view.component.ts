@@ -57,7 +57,8 @@ export class AllocatedTransactionsViewComponent implements OnInit, OnChanges {
         title: sb.transactionName,
         subTitle: this._transaction.getTransactionSubTitle(sb.accountName, sb.accountNumber),
         value: sb.amount,
-        id: sb.spendingBucketTransactionId
+        id: sb.spendingBucketTransactionId,
+        displayValue: this._transaction.signTransaction(sb.amount, sb.transactionType)
       }))
     );
 
