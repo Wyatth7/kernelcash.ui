@@ -27,6 +27,13 @@ export class AuthenticationService {
     return this._user;
   }
 
+  public get activeBudgetGroupId(): number {
+    if (!this._user)
+      this.logout();
+
+    return this._user.budgetGroupIds[0];
+  }
+
   public setCurrentUser(user: User) {
     this._subject.next(user);
     this._user = {...user};
