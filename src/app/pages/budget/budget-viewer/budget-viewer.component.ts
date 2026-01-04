@@ -85,7 +85,7 @@ export class BudgetViewerComponent extends PageComponent implements OnInit{
             {
               title: bucket.name,
               value: bucket.remaining,
-              displayValue: bucket.spendingBucketType === SpendingBucketType.Savings && bucket.remaining < 0 ? `+${bucket.remaining}` : bucket.remaining,
+              displayValue: bucket.spendingBucketType === SpendingBucketType.Savings && bucket.remaining < 0 ? Math.abs(bucket.remaining) : bucket.remaining,
               id: bucket.spendingBucketId,
               onClick: this.spendingBucketSelected.bind(this),
               total: bucket.total,

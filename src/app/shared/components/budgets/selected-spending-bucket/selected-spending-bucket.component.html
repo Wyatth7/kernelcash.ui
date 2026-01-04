@@ -26,7 +26,7 @@
               (loading)="loading.set($event)"
               (spendingBucketLoaded)="spendingBucketLoaded($event)"
               (remainingValue)="calculateTotalRemaining($event)"
-              (itemsDeallocated)="actionRun(Math.abs($event))"
+              (itemsDeallocated)="actionRun(Math.abs($event), false)"
             />
           }
           @case(SelectedView.Unallocated) {
@@ -41,7 +41,9 @@
             />
           }
           @case (SelectedView.Income) {
-            <kc-selected-income-bucket [selectedSpendingBucket]="selectedSpendingBucket()" />
+            <kc-selected-income-bucket
+              (recordedIncomeData)="incomeRecorded($event)"
+              [selectedSpendingBucket]="selectedSpendingBucket()" />
           }
         }
     </div>

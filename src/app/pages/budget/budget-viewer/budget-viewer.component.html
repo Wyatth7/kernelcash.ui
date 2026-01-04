@@ -5,7 +5,7 @@
     <ng-template #valueTemplate let-item>
       <div class="flex gap-2">
         <kc-total-text [total]="item.total" text="Total" severity="info" size="md"/>
-        @if (item.spendingBucketType === SpendingBucketType.Savings && item.value < 0) {
+        @if (item.spendingBucketType === SpendingBucketType.Savings || item.spendingBucketType === SpendingBucketType.Income && item.value < 0) {
           <kc-total-text [total]="item.displayValue" text="Surplus" size="md" />
         } @else {
           <kc-total-text [total]="item.displayValue" text="Remaining" size="md" />
@@ -19,13 +19,15 @@
   </div>
 }
 
-<kc-drawer [(visible)]="showSelectedSpendingBucket">
-  <kc-selected-spending-bucket
-    (reload)="loadBudget()"
-    [budgetDateRange]="budgetDateRange"
-    [spendingBucketId]="+(selectedSpendingBucket()?.id ?? 0)"
-    [resetContent]="!showSelectedSpendingBucket()" />
-</kc-drawer>
+@if (showSelectedSpendingBucket()) {
+  <kc-drawer [(visible)]="showSelectedSpendingBucket">
+    <kc-selected-spending-bucket
+      (reload)="loadBudget()"
+      [budgetDateRange]="budgetDateRange"
+      [spendingBucketId]="+(selectedSpendingBucket()?.id ?? 0)"
+      [resetContent]="!showSelectedSpendingBucket()" />
+  </kc-drawer>
+}
 
 <ng-template #pageTemplate>
   @if (budget()) {

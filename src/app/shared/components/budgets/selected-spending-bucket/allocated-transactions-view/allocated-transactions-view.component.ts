@@ -55,7 +55,7 @@ export class AllocatedTransactionsViewComponent implements OnInit, OnChanges {
     this.transactionItems.set(
       spendingBucket.spendingBucketTransactions.map(sb => ({
         title: sb.transactionName,
-        subTitle: this._transaction.getTransactionSubTitle(sb.accountName, sb.accountNumber),
+        subTitle: sb.accountName || sb.accountNumber ? this._transaction.getTransactionSubTitle(sb.accountName, sb.accountNumber) : undefined,
         value: sb.amount,
         id: sb.spendingBucketTransactionId,
         displayValue: this._transaction.signTransaction(sb.amount, sb.transactionType)

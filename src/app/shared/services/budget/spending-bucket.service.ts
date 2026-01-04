@@ -8,6 +8,7 @@ import {
   CreateSpendingBucketTransaction
 } from '../../models/budgets/spending-buckets/create-spending-bucket-transaction';
 import {LoggingService} from '../logging.service';
+import {RecordedIncomeData} from '../../models/budgets/recorded-income-data';
 
 type Remainging = {
   remaining: number;
@@ -55,6 +56,22 @@ export class SpendingBucketService {
     }
   }
 
+
+  public async recordIncome(spendingBucketId: number, amount: number): Promise<RecordedIncomeData | undefined> {
+    try {
+      const result = await lastValueFrom<OkApiResponseWithData<RecordedIncomeData>>
+      (
+        this._http.post<OkApiResponseWithData<RecordedIncomeData>>(`${this._baseUrl}/${spendingBucketId}/income`, {
+          amount
+        })
+      );
+
+      return result.data;
+    } catch (e) {
+      this._logger.error(`Could not record income for spending bucket ${spendingBucketId}; Exception: ${e}`);
+      return undefined;
+    }
+  }
 
   public async deallocateTransactions(spendingBucketTransactionIds: number[], spendingBucketId: number): Promise<number | undefined> {
     try {

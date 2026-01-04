@@ -9,6 +9,7 @@ import {
 } from './unallocated-transactions-view/unallocated-transactions-view.component';
 import {SpendingBucketType} from '../../../models/budgets/spending-buckets/spending-bucket-type';
 import {SelectedIncomeBucketComponent} from './selected-income-bucket/selected-income-bucket.component';
+import {RecordedIncomeData} from '../../../models/budgets/recorded-income-data';
 
 export enum SelectedView {
   Allocated,
@@ -49,30 +50,41 @@ export class SelectedSpendingBucketComponent implements OnChanges {
       return;
     }
 
-    if (this._previousSpendingBucketId === this.spendingBucketId())
+    if (this._previousSpendingBucketId === this.spendingBucketId()) {
       return;
+    }
 
     this._previousSpendingBucketId = this.spendingBucketId();
   }
 
   protected spendingBucketLoaded(spendingBucket: SelectedSpendingBucketView): void {
     this.selectedSpendingBucket.set(spendingBucket);
-    const remainingAmount = spendingBucket.spendingBucketType === SpendingBucketType.Savings && spendingBucket.remaining < 0 ? Math.abs(spendingBucket.remaining) : spendingBucket.remaining;
+    const remainingAmount = spendingBucket.spendingBucketType === SpendingBucketType.Savings
+    && spendingBucket.remaining < 0
+      ? Math.abs(spendingBucket.remaining)
+      : spendingBucket.remaining;
 
     this.remainingBudgetAmount.set(remainingAmount);
 
     if (this.selectedSpendingBucket()?.spendingBucketType === SpendingBucketType.Income
-      && this.selectedSpendingBucket()?.spendingBucketTransactions.length === 0)
+      && this.selectedSpendingBucket()?.spendingBucketTransactions.length === 0) {
       this.selectedView.set(SelectedView.Income);
+    }
   }
 
-  protected async actionRun(remaining: number): Promise<void> {
+  protected async actionRun(remaining: number, allocated = true): Promise<void> {
     const selectedBucket = this.selectedSpendingBucket();
     if (selectedBucket?.remaining)
       selectedBucket.remaining = remaining;
 
-    this.selectedView.set(SelectedView.Allocated);
+      this.selectedView.set(SelectedView.Allocated);
+
     this.reload.emit();
+  }
+
+  protected async incomeRecorded(data: RecordedIncomeData): Promise<void> {
+    this.selectedSpendingBucket()!.total = data.spendingBucketTotal;
+    await this.actionRun(0);
   }
 
   protected calculateTotalRemaining(value: number): void {
