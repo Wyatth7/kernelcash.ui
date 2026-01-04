@@ -88,13 +88,13 @@ export class SelectedSpendingBucketComponent implements OnChanges {
   }
 
   protected calculateTotalRemaining(value: number): void {
+    console.log(value)
     const totalRemaining = this.selectedSpendingBucket()?.remaining ?? 0;
 
-    let remaining = totalRemaining - value;
+    if (this.selectedSpendingBucket()?.spendingBucketType !== SpendingBucketType.Income)
+      value *= -1;
 
-    // TODO: most likely need to add a check for negative income / savings, and change the user to be green with a +$100.00, ect.
-    // if (remaining < 0 && (this.selectedSpendingBucket()?.spendingBucketType === SpendingBucketType.Income || this.selectedSpendingBucket()?.spendingBucketType === SpendingBucketType.Savings))
-    //   remaining = Math.abs(remaining); // negative income / savings means excess in earnings or savings.
+    let remaining = totalRemaining + value;
 
     this.remainingBudgetAmount.set(remaining);
   }
